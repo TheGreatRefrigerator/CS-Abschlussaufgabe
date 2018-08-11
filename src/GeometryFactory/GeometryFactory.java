@@ -12,8 +12,33 @@ public interface GeometryFactory {
 //        return geom;
 //    }
 
-    public static Point createPoint(String wkt) {
-    	String wktString = wkt.split("[()]"); 
+    public static Point createPoint(String wktString) {
+    	String[] wkt = wktString.split("[()]"); 
+    	String type = wkt[0].split(" ")[1]; 
+    	String[] coordinates = wkt[1].split(" ");
+    	
+    	
+    	double[] coord = new double[coordinates.length]; 
+    	
+    	for(int i=0; i < coord.length; i++) {
+    		coord[i] = Double.parseDouble(coordinates[i]);
+    	}
+    	
+    	if(type.equals("M")) {
+    		return Point(coord, type); 
+    	}
+    	else if(type.equals("Z")) { 
+    		return Point(coord, type);
+    	}
+    	else if(type.equals("ZM")) { 
+    		return Point(coord, type); 
+    	}
+    	else	{ 
+    		return Point(coord, type); 
+    	}
+    	
+    	   	
+    	
 
     }
 //    public static Point createPoint(double... coords)
