@@ -2,8 +2,6 @@ package GeometryFactory;
 
 public class Polygon implements Geometry {
     private String info;
-
-    
     
     Polygon(){
         info = "helljopihhipiiphjhpioo";
