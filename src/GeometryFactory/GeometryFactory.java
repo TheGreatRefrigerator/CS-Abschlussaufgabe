@@ -13,6 +13,7 @@ public interface GeometryFactory {
 //    }
 
     public static Point createPoint(String wkt) {
+    	String wktString = wkt.split("[()]"); 
 
     }
 //    public static Point createPoint(double... coords)
