@@ -3,7 +3,7 @@ package GeometryFactory;
 public interface Geometry {
 
 		
-	// Fl‰che einer Geometrie 
+	// Fl√§che einer Geometrie
 //		public double Area(); 
 
 	// Zentriod

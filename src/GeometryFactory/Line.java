@@ -8,7 +8,7 @@ public class Line implements Geometry {
 	// Konstruktor mit Start und End Punkt // z.B. wenn schon Punkte vorhanden sind
 	// Parameter1 start -> Startpunkt
 	// Parameter2 end -> Endpunkt
-	public Line(Point start, Point end) { // Line, weil der Konstruktor wie die KLasse heiﬂen muss
+	public Line(Point start, Point end) { // Line, weil der Konstruktor wie die KLasse hei√üen muss
 		this.start = start; // als Klassenvariable speichern
 		this.end = end;
 	}
@@ -18,8 +18,15 @@ public class Line implements Geometry {
 	// Start: (x1/y1)
 	// End: (x2/y2)
 	public Line(double x1, double y1, double x2, double y2) {
-		this.start = new Point(x1, y1);
-		this.end = new Point(x2, y2);
+//		this.start = new Point(x1, y1);
+//		this.end = new Point(x2, y2);
+	}
+
+	public Line(String wkt) {
+	}
+
+	public Line() {
+
 	}
 
 	// METHODEN
@@ -33,10 +40,11 @@ public class Line implements Geometry {
 		return end;
 	}
 
-	// Returns WKT Repr‰sentation des line string
+	// Returns WKT Repr√§sentation des line string
 	public String getWKT() {
-		return "LINESTRING (" + String.valueOf(start.getX()) + " " + String.valueOf(start.getY()) + ", "
-				+ String.valueOf(end.getX()) + " " + String.valueOf(end.getY()) + ")";
+//		return "LINESTRING (" + String.valueOf(start.getX()) + " " + String.valueOf(start.getY()) + ", "
+//				+ String.valueOf(end.getX()) + " " + String.valueOf(end.getY()) + ")";
+		return null;
 	}
 
 	// Neuer Endpunkt
@@ -49,14 +57,14 @@ public class Line implements Geometry {
 		this.start = start;
 	}
 
-	// Fl‰che einer Geometrie
+	// Fl√§che einer Geometrie
 	public double Area() {
 		return 0;
 	}
 
 	// Ausdehnung
 	public double Extent() {
-		return start.distanceTo(end);
+		return Double.parseDouble(null); /*start.distanceTo(end);*/
 	};
 
 	@Override

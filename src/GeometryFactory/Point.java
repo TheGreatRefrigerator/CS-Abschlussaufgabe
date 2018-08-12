@@ -2,109 +2,153 @@ package GeometryFactory;
 
 public class Point implements Geometry {
 
-	// Initialvariablen
-	private double x, y;
+    // Initialvariablen
+    private double[] coordinates;
+    private int d; // dimension
+    private double lrsValue; // see https://en.wikipedia.org/wiki/Well-known_text and https://en.wikipedia.org/wiki/Linear_referencing
 
-	// KonstruktorI mit 2 Argumenten (Koordinaten)
-	public Point(double x, double y) {
-		this.x = x;
-		this.y = y;
-	}
+    // KonstruktorI mit 2 Argumenten (Koordinaten)
+//	public Point(double... cords) {
+//        coordinates =  cords;
+//	}
 
-	// KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
-	public Point(double[] coords) { // coords = Array-Name
-		if (coords.length == 2) {
-			this.x = coords[0];
-			this.y = coords[1];
-		} else { // Default, wenn zu wenig/viele Koordinaten eingegeben werden
-			this.x = 0;
-			this.y = 0;
-		}
-	}
+    // KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
+    public Point(double[] coords) { // coords = Array-Name
+        coordinates = coords;
+        d = 0;
+        for (double i : coords) {
+            d++;
+        }
+    }
+    // TODO: copyconstructor for point with coordinates array
+    // Konstruktor fÃ¼r deep-copy von Punkt (-> Punkt b)
+    // Parameter p: der zu kopierende Punkt
+//	public Point(Point p) {
+//		x = p.x;
+//		y = p.y;
+//	}
+//
+//	public Point() {
+//		x = 0;
+//		y = 0;
+//	}
+    //	// Getter/Setter
 
-	// Konstruktor für deep-copy von Punkt (-> Punkt b)
-	// Parameter p: der zu kopierende Punkt
-	public Point(Point p) {
-		x = p.x;
-		y = p.y;
-	}
+    /**
+     * Returns the point coordinates
+     *
+     * @return the coordinates double array
+     */
+    public double[] getCoordinates() {
+        return coordinates;
+    }
 
-	// HIER FANGEN JETZT DIE METHODEN AN.. GLAUBE ICH...
+    /**
+     * @return
+     */
+    public double getX() {
+        return coordinates[0];
+    }
 
-	// vererbt von Geometrie
-	public String getWKT() {
-		String wkt = "Punkt (" + String.valueOf(getX()) + "," + String.valueOf(getY()) + ")";
-		return wkt;
-	}
 
-	// Getter/Setter
-	public double getX() {
-		return this.x;
-	}
+    public double getY() {
+        return coordinates[1];
+    }
 
-	public double getY() {
-		return this.y;
-	}
+    public void setX(double x) {
+        coordinates[0] = x;
+    }
 
-	public void setX() {
-		this.x = x;
-	}
+    public void setY(double y) {
+        coordinates[1] = y;
+    }
 
-	public void setY() {
-		this.y = y;
-	}
+    /**
+     * Returns the measure value of the point
+     *
+     * @return the point value
+     */
+    public double getLrsValue() {
+        return lrsValue;
+    }
 
-	// Distanz von diesem zu einem anderen Punkt
-	// Parameter b: anderer Punkt
-	// return: Distanz
-	public double distanceTo(Point b) {
-		double a_quadrat = Math.pow(b.getX() - getX(), 2); // wuuuhu!
-		double b_quadrat = Math.pow(b.getY() - getY(), 2);
-		double dist = Math.sqrt(a_quadrat + b_quadrat);
-		return dist;
-	}
+    /**
+     * Returns the point dimension
+     *
+     * @return the dimension
+     */
+    public int getDimension() {
+        return d;
+    }
+    // HIER FANGEN JETZT DIE METHODEN AN.. GLAUBE ICH...
+    // -> das ist richtig
 
-	// Winkel zwischen diesem und einem weiteren Punkt
-	// Parameter b: anderer Punkt
-	// return: Winkel in Grad
-	public double getAngle(Point p) {
-		double angle = Math.toDegrees(Math.atan2(p.y - this.getY(), p.x - this.getX()));
-		if (angle < 0)
-			angle += 360;
-		return angle;
-	}
+    // vererbt von Geometrie
+    public String getWKT() {
+        if (d > 1 && d < 4) {
+            String wkt = "Punkt (";
+            //TODO: loop through coords, check lrsValue -> POINT M , d = 3 -> POINT Z, d= 2 -> POINT
+            wkt += ")";
+            return wkt;
+        }
+        else {
+            // TODO: no WKT representation exception
+            return null;
+        }
+    }
 
-	// Fläche
-	public double Area() {
-		return 0;
-	}
 
-	// Ausdehnung
-	public double Extent() {
-		return 0;
-	}
+//	// Distanz von diesem zu einem anderen Punkt
+//	// Parameter b: anderer Punkt
+//	// return: Distanz
+//	public double distanceTo(Point b) {
+//		double a_quadrat = Math.pow(b.getX() - getX(), 2); // wuuuhu!
+//		double b_quadrat = Math.pow(b.getY() - getY(), 2);
+//		double dist = Math.sqrt(a_quadrat + b_quadrat);
+//		return dist;
+//	}
+//
+//	// Winkel zwischen diesem und einem weiteren Punkt
+//	// Parameter b: anderer Punkt
+//	// return: Winkel in Grad
+//	public double getAngle(Point p) {
+//		double angle = Math.toDegrees(Math.atan2(p.y - this.getY(), p.x - this.getX()));
+//		if (angle < 0)
+//			angle += 360;
+//		return angle;
+//	}
 
-	// Zentriod
-	// public double Centroid() {
-	// ? return this; }
+    // FlÃ¤che
+    public double Area() {
+        return 0;
+    }
 
-	// Methode, um Objekte vergleichen -> Hier Punkt mit Referenzpunkt b
-	public boolean equals(Object o) {
-		Point b = (Point) o;
-		return ((this.getX() == b.getX())) && ((this.getY() == b.getX()));
+    // Ausdehnung
+    public double Extent() {
+        return 0;
+    }
 
-	}
+    // Zentriod
+    // public double Centroid() {
+    // ? return this; }
 
-	@Override
-	public String getInfo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	// Methode, um Objekte vergleichen -> Hier Punkt mit Referenzpunkt b
+//	public boolean equals(Object o) {
+//		Point b = (Point) o;
+//		return ((this.getX() == b.getX())) && ((this.getY() == b.getX()));
+//
+//	}
 
-	@Override
-	public Polygon buffer(double range) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getInfo() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Polygon buffer(double range) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
