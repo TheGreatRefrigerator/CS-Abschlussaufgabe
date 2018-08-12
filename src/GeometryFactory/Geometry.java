@@ -14,8 +14,9 @@ public interface Geometry {
 
 
     String getInfo();
+    // TODO move this to the Feature Interface
 
     Polygon buffer(double range);
-
+    // TODO move this to the Feature Interface
     String getWKT();
 }

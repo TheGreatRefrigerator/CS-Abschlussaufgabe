@@ -2,22 +2,26 @@ package GeometryFactory;
 
 public class Line implements Geometry {
 
-	// Initialvariablen
-	private Point start, end; // Point = wie double/string -> Datentyp und danach die Eingabewerte
+	// Attributes of the Line Object
+	private Point[] points;
 
-	// Konstruktor mit Start und End Punkt // z.B. wenn schon Punkte vorhanden sind
-	// Parameter1 start -> Startpunkt
-	// Parameter2 end -> Endpunkt
-	public Line(Point start, Point end) { // Line, weil der Konstruktor wie die KLasse heißen muss
-		this.start = start; // als Klassenvariable speichern
-		this.end = end;
+	/**
+	 * Constructor will take any amount of Points because of the ...(spread) operator
+	 * @param points - The array of Points
+	 */
+	public Line(Point... points) { // Line, weil der Konstruktor wie die KLasse heißen muss
+		//TODO check if all points have the same dimension
+		// set the points Attribute
+		this.points = points;
 	}
 
 	// Konstruktor mit Koordinaten // wenn wir neue Punkte mit Koordinaten
 	// definieren wollen
 	// Start: (x1/y1)
 	// End: (x2/y2)
-	public Line(double x1, double y1, double x2, double y2) {
+
+	public Line(int dimension, double... coords) {
+
 //		this.start = new Point(x1, y1);
 //		this.end = new Point(x2, y2);
 	}
@@ -31,36 +35,51 @@ public class Line implements Geometry {
 
 	// METHODEN
 
-	// Returns Startpunkt und Endpunkt
+	/**
+	 * Returns the starting point of a line
+	 * @return the starting point
+	 */
 	public Point getStart() {
-		return start;
+		return points[0];
 	} // returnt einen Punkt, keine doubles(also keine Koordinaten)
+	// der Punkt selbst hat dafür die Fähigkeit die Koordinaten anzuzeigen
 
+	/**
+	 * Returns the Endpoint of a Line
+	 * @return the Endpoint
+	 */
 	public Point getEnd() {
-		return end;
+		return points[points.length - 1];
 	}
 
 	// Returns WKT Repräsentation des line string
 	public String getWKT() {
-//		return "LINESTRING (" + String.valueOf(start.getX()) + " " + String.valueOf(start.getY()) + ", "
-//				+ String.valueOf(end.getX()) + " " + String.valueOf(end.getY()) + ")";
+		// TODO like in Point.java check the dimension before returning wkt and return exception if not valid
+		// TODO loop through coords and build WKT
 		return null;
 	}
 
-	// Neuer Endpunkt
-	public void setEnd(Point end) {
-		this.end = end;
-	}
-
-	// Neuer Startpunkt
+	/**
+	 * Set a new starting point for the line
+	 * @param start - the new starting point
+	 */
 	public void setStart(Point start) {
-		this.start = start;
+		points[0] = start;
 	}
 
-	// Fläche einer Geometrie
-	public double Area() {
-		return 0;
+	/**
+	 * Set a new Endpoint for the line
+	 * @param end - the new endpoint
+	 */
+	public void setEnd(Point end) {
+		points[points.length - 1] = end;
 	}
+
+	// TODO do we need this for Lines ?
+//	// Fläche einer Geometrie
+//	public double Area() {
+//		return 0;
+//	}
 
 	// Ausdehnung
 	public double Extent() {
@@ -69,11 +88,13 @@ public class Line implements Geometry {
 
 	@Override
 	public String getInfo() {
+		// TODO this will be moved to the Feature Interface as the geometry should not have additional information itself
 		return null;
 	}
 
 	@Override
 	public Polygon buffer(double range) {
+		// TODO this will also be moved to the Feature Interface
 		return null;
 	}
 

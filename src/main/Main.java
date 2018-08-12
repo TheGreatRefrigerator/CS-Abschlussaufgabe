@@ -13,11 +13,19 @@ public class Main {
         System.out.println(arr[1].split(" ")); //
         // Yay, it works like this
         Point p = GeometryFactory.createPoint(new double[] {23.4, 123.2,3,42,1,54,3});
+        Point q = GeometryFactory.createPoint("POINT M (30 10)");
+        //
+        System.out.println("Point p");
         for (double cord : p.getCoordinates()) {
             System.out.println(cord);
         }
+
+        System.out.println("Point q");
+        for (double cord :  q.getCoordinates()) {
+            System.out.println(cord);
+        }
 //        Geometry point = GeometryFactory.createGeomFromWKT("POINT");
-//        System.out.println(point.getInfo());
+        System.out.println(p.getInfo());
     }
 
 }

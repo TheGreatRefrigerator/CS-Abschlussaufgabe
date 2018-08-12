@@ -8,18 +8,27 @@ public class Point implements Geometry {
     private double lrsValue; // see https://en.wikipedia.org/wiki/Well-known_text and https://en.wikipedia.org/wiki/Linear_referencing
 
     // KonstruktorI mit 2 Argumenten (Koordinaten)
-//	public Point(double... cords) {
-//        coordinates =  cords;
-//	}
+	public Point(double... coords) {
+        this(0, coords);
+    }
 
-    // KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
-    public Point(double[] coords) { // coords = Array-Name
+    // KonstruktorI mit 2 Argumenten (Koordinaten)
+	public Point(double lrsValue , double... coords) {
         coordinates = coords;
         d = 0;
         for (double i : coords) {
             d++;
         }
-    }
+	}
+
+    // KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
+//    public Point(double[] coords) { // coords = Array-Name
+//        coordinates = coords;
+//        d = 0;
+//        for (double i : coords) {
+//            d++;
+//        }
+//    }
     // TODO: copyconstructor for point with coordinates array
     // Konstruktor für deep-copy von Punkt (-> Punkt b)
     // Parameter p: der zu kopierende Punkt
@@ -80,11 +89,17 @@ public class Point implements Geometry {
     public int getDimension() {
         return d;
     }
+
     // HIER FANGEN JETZT DIE METHODEN AN.. GLAUBE ICH...
     // -> das ist richtig
 
     // vererbt von Geometrie
     public String getWKT() {
+        /*
+        get WKT only if it's a valid dimension (2D, 2D+ M, 3D, 3D + M) https://en.wikipedia.org/wiki/Well-known_text
+        'Coordinates for geometries may be 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) with an m value
+        that is part of a linear referencing system or 2D with an m value (x, y, m).'
+        */
         if (d > 1 && d < 4) {
             String wkt = "Punkt (";
             //TODO: loop through coords, check lrsValue -> POINT M , d = 3 -> POINT Z, d= 2 -> POINT
@@ -93,6 +108,7 @@ public class Point implements Geometry {
         }
         else {
             // TODO: no WKT representation exception
+            // inform user that point can't be represented in wkt because of wrong dimension 1D or 4D or higher
             return null;
         }
     }
@@ -141,7 +157,7 @@ public class Point implements Geometry {
 
     @Override
     public String getInfo() {
-        // TODO Auto-generated method stub
+        // TODO this will be moved to the feature as the geometry should not have additional information itself
         return null;
     }
 

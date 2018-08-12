@@ -61,7 +61,8 @@ public class Polygon implements Geometry {
 
 	@Override
 	public String getInfo() {
-		return info;
+        // TODO this will be moved to the feature as the geometry should not have additional information itself
+	    return info;
 	}
 
 	@Override
