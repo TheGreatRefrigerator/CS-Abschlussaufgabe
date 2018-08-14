@@ -3,7 +3,7 @@ package GeometryFactory;
 public interface Geometry {
 
 		
-	// Fl‰che einer Geometrie 
+	// Fl√§che einer Geometrie
 //		public double Area(); 
 
 	// Zentriod
@@ -14,8 +14,9 @@ public interface Geometry {
 
 
     String getInfo();
+    // TODO move this to the Feature Interface
 
     Polygon buffer(double range);
-
+    // TODO move this to the Feature Interface
     String getWKT();
 }

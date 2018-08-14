@@ -25,10 +25,13 @@ public class Polygon implements Geometry {
 		}
 	}
 
+	public Polygon(String wkt) {
+	}
+
 	// METHODEN
 
-	// Getter, der die Polygon-Punkte zurückgibt
-	public List<Point> getPoints() { // List<Point> -> Rückgabetyp
+	// Getter, der die Polygon-Punkte zurÃ¼ckgibt
+	public List<Point> getPoints() { // List<Point> -> Rï¿½ckgabetyp
 		return this.points;
 	}
 
@@ -36,7 +39,7 @@ public class Polygon implements Geometry {
 	public String getWKT() {
 		String wkt = "Polygon( ";
 		for (Point p : this.points) {
-			wkt += String.valueOf(p.getX()) + " " + String.valueOf(p.getY()) + ",";
+//			wkt += String.valueOf(p.getX()) + " " + String.valueOf(p.getY()) + ",";
 		}
 		wkt += ")";
 		return wkt;
@@ -46,10 +49,10 @@ public class Polygon implements Geometry {
 	public Point Centroid() {
 		double x_centroid = 0.0, y_centroid = 0.0;
 		for (Point p : points) {
-			x_centroid += p.getX();
-			y_centroid += p.getY();
+//			x_centroid += p.getX();
+//			y_centroid += p.getY();
 		}
-		return new Point(x_centroid / points.size(), y_centroid / points.size());
+		return new Point(new double[] {x_centroid,y_centroid});
 	}
 
 	Polygon() {
@@ -58,7 +61,8 @@ public class Polygon implements Geometry {
 
 	@Override
 	public String getInfo() {
-		return info;
+        // TODO this will be moved to the feature as the geometry should not have additional information itself
+	    return info;
 	}
 
 	@Override
