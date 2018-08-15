@@ -1,5 +1,7 @@
 package GeometryFactory;
 
+import Exceptions.WKTDimensionalException;
+
 public class GeometryFactory {
 
 	public static Point createPoint(String wktString) {
@@ -31,6 +33,9 @@ public class GeometryFactory {
 
 		// create new double array to save the values that are still in string format
 		double[] coord = new double[coordinates.length];
+		
+		
+		
 
 		// loop through and convert string values to doubles
 		for (int i = 0; i < coord.length; i++) {
@@ -59,7 +64,7 @@ public class GeometryFactory {
 	// }
 
 	// Line-WKT splitten...
-	public static Line createLine(String wktLine) {
+	public static Line createLine(String wktLine) throws WKTDimensionalException {
 		String[] wkt = wktLine.split("[()]");
 //		"LINESTRING (12 31, 2 4, 2 1, 12)" -> "LINESTRING ", "12 31, 2 4, 2 1, 12"
 		String[] points = wkt[1].split(",");
@@ -69,16 +74,18 @@ public class GeometryFactory {
 		
 		for (int i = 0; i < points.length; i++) {
 			
-			String[] value = points[i].split(" ");
-
+			String[] coords = points[i].split(" ");
+			if (coords.length > 3) {
+				throw new WKTDimensionalException();
+			}
 			// create array to save the double values of the coords
-			double[] pointValues = new double[value.length];
+			double[] pointValues = new double[coords.length];
 
 			// wenn wir dimensionstechnisch flexibel sein wollen
-			for (int x = 0; x < value.length; x++) {
+			for (int x = 0; x < coords.length; x++) {
 				// ...und in Double umwandeln
 //				System.out.println(value[x]);
-				String svalue = value[x];
+				String svalue = coords[x];
 				pointValues[x] = Double.parseDouble(svalue);
 			}
 			

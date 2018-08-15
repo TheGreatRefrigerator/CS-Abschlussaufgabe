@@ -5,15 +5,21 @@ public class Point implements Geometry {
     // Initialvariablen
     private double[] coordinates;
     private int d; // dimension
-    private double lrsValue; // see https://en.wikipedia.org/wiki/Well-known_text and https://en.wikipedia.org/wiki/Linear_referencing
+	private Double lrsValue; // see https://en.wikipedia.org/wiki/Well-known_text and https://en.wikipedia.org/wiki/Linear_referencing
 
     // KonstruktorI mit 2 Argumenten (Koordinaten)
 	public Point(double... coords) {
-        this(0, coords);
+        lrsValue = null;
+        d = 0;
+        coordinates = coords;
+        for (double i : coords) {
+            d++;
+        }
     }
 
     // KonstruktorI mit 2 Argumenten (Koordinaten)
 	public Point(double lrsValue , double... coords) {
+		this.lrsValue = new Double(lrsValue);
         coordinates = coords;
         d = 0;
         for (double i : coords) {
@@ -51,6 +57,15 @@ public class Point implements Geometry {
     public double[] getCoordinates() {
         return coordinates;
     }
+    
+    /**
+     * Sets the value for a specific coordinate
+     * @param position - the dimensional position (x = 1, y = 2 ...)
+     * @param value - the new value
+     */
+    public void setCoordinates(int position, double value ) {
+    	coordinates[position - 1] = value;
+    }
 
     /**
      * @return
@@ -78,7 +93,14 @@ public class Point implements Geometry {
      * @return the point value
      */
     public double getLrsValue() {
-        return lrsValue;
+    	double d = 0;
+    	
+    	try {
+    		d = lrsValue.doubleValue();
+    	} catch (NullPointerException e) {
+			System.out.println("No Value");
+		}
+		return d;
     }
 
     /**
@@ -100,9 +122,24 @@ public class Point implements Geometry {
         'Coordinates for geometries may be 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) with an m value
         that is part of a linear referencing system or 2D with an m value (x, y, m).'
         */
+    	System.out.println(lrsValue == null);
         if (d > 1 && d < 4) {
-            String wkt = "Punkt (";
-            //TODO: loop through coords, check lrsValue -> POINT M , d = 3 -> POINT Z, d= 2 -> POINT
+            String wkt = "POINT ";
+            if (d == 3) {
+            	wkt += 'Z';
+            }
+            if (lrsValue != null) {
+            	wkt += 'M';
+            }
+            wkt += '(';
+            for (int j = 0; j < coordinates.length; j++) {
+				double i = coordinates[j];
+				wkt += String.valueOf(i);
+				if (j < coordinates.length - 1) {
+					wkt += " ";
+				}
+			}
+            //TODO: loop through coords
             wkt += ")";
             return wkt;
         }

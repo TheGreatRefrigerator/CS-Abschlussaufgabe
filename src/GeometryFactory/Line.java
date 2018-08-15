@@ -29,6 +29,10 @@ public class Line implements Geometry {
 	public Line(String wkt) {
 	}
 
+	public Point[] getPoints() {
+		return points;
+	}
+
 	public Line() {
 
 	}
