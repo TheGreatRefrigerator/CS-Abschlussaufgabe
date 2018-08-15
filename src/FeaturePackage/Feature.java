@@ -4,5 +4,9 @@ import GeometryFactory.Geometry;
 import GeometryFactory.Polygon;
 
 public interface Feature {
-    public Polygon buffer();
+	
+    Geometry getGeometry();
+    String getInfo();
+    Polygon buffer(double range);
+    String getWKT();
 }

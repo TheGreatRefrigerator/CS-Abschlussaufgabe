@@ -198,10 +198,12 @@ public class Point implements Geometry {
         return null;
     }
 
-    @Override
-    public Polygon buffer(double range) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public Polygon buffer(double range) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+   
 
 }
