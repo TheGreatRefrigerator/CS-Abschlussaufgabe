@@ -36,6 +36,7 @@ public class Polygon implements Geometry {
 	}
 
 	// WKT
+	@Override
 	public String getWKT() {
 		String wkt = "Polygon( ";
 		for (Point p : this.points) {
@@ -52,22 +53,11 @@ public class Polygon implements Geometry {
 //			x_centroid += p.getX();
 //			y_centroid += p.getY();
 		}
-		return new Point(new double[] {x_centroid,y_centroid});
+		return new Point(new double[] { x_centroid, y_centroid });
 	}
 
 	Polygon() {
 		info = "helljopihhipiiphjhpioo";
-	}
-
-	@Override
-	public String getInfo() {
-        // TODO this will be moved to the feature as the geometry should not have additional information itself
-	    return info;
-	}
-
-	@Override
-	public Polygon buffer(double range) {
-		return null;
 	}
 
 }

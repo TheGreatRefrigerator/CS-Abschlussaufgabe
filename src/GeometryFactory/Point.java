@@ -2,32 +2,55 @@ package GeometryFactory;
 
 public class Point implements Geometry {
 
-    // Initialvariablen
-    private double[] coordinates;
-    private int d; // dimension
-	private Double lrsValue; // see https://en.wikipedia.org/wiki/Well-known_text and https://en.wikipedia.org/wiki/Linear_referencing
+	// Initialvariablen
+	private double[] coordinates;
+	private int d; // dimension
+	private Double mValue; // see https://en.wikipedia.org/wiki/Well-known_text and
+							// https://en.wikipedia.org/wiki/Linear_referencing
+	private String wktType;
 
-    // KonstruktorI mit 2 Argumenten (Koordinaten)
-	public Point(double... coords) {
-        lrsValue = null;
-        d = 0;
-        coordinates = coords;
-        for (double i : coords) {
-            d++;
-        }
-    }
-
-    // KonstruktorI mit 2 Argumenten (Koordinaten)
-	public Point(double lrsValue , double... coords) {
-		this.lrsValue = new Double(lrsValue);
-        coordinates = coords;
-        d = 0;
-        for (double i : coords) {
-            d++;
-        }
+	public String getWktType() {
+		return wktType;
 	}
 
-    // KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
+	public void setWktType(String wktType) {
+		this.wktType = wktType;
+	}
+
+	// KonstruktorI mit 2 Argumenten (Koordinaten)
+	public Point(double... coords) {
+		mValue = null;
+		d = 0;
+		coordinates = coords;
+		for (double i : coords) {
+			d++;
+		}
+		if (d < 4 && d > 1) {
+			if (d == 2 && mValue == null) {
+				wktType = "Normal";
+			} else if (d == 3) {
+				wktType = "Z";
+			}
+			if (mValue != null) {
+				wktType += "M";
+			}
+		} else {
+			wktType = null;
+		}
+
+	}
+
+	// KonstruktorI mit 2 Argumenten (Koordinaten)
+	public Point(double lrsValue, double... coords) {
+		this.mValue = new Double(lrsValue);
+		coordinates = coords;
+		d = 0;
+		for (double i : coords) {
+			d++;
+		}
+	}
+
+	// KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
 //    public Point(double[] coords) { // coords = Array-Name
 //        coordinates = coords;
 //        d = 0;
@@ -35,9 +58,9 @@ public class Point implements Geometry {
 //            d++;
 //        }
 //    }
-    // TODO: copyconstructor for point with coordinates array
-    // Konstruktor für deep-copy von Punkt (-> Punkt b)
-    // Parameter p: der zu kopierende Punkt
+	// TODO: copyconstructor for point with coordinates array
+	// Konstruktor für deep-copy von Punkt (-> Punkt b)
+	// Parameter p: der zu kopierende Punkt
 //	public Point(Point p) {
 //		x = p.x;
 //		y = p.y;
@@ -47,109 +70,107 @@ public class Point implements Geometry {
 //		x = 0;
 //		y = 0;
 //	}
-    //	// Getter/Setter
+	// // Getter/Setter
 
-    /**
-     * Returns the point coordinates
-     *
-     * @return the coordinates double array
-     */
-    public double[] getCoordinates() {
-        return coordinates;
-    }
-    
-    /**
-     * Sets the value for a specific coordinate
-     * @param position - the dimensional position (x = 1, y = 2 ...)
-     * @param value - the new value
-     */
-    public void setCoordinates(int position, double value ) {
-    	coordinates[position - 1] = value;
-    }
+	/**
+	 * Returns the point coordinates
+	 *
+	 * @return the coordinates double array
+	 */
+	public double[] getCoordinates() {
+		return coordinates;
+	}
 
-    /**
-     * @return
-     */
-    public double getX() {
-        return coordinates[0];
-    }
+	/**
+	 * Sets the value for a specific coordinate
+	 * 
+	 * @param position - the dimensional position (x = 1, y = 2 ...)
+	 * @param value    - the new value
+	 */
+	public void setCoordinates(int position, double value) {
+		coordinates[position - 1] = value;
+	}
 
+	/**
+	 * @return
+	 */
+	public double getX() {
+		return coordinates[0];
+	}
 
-    public double getY() {
-        return coordinates[1];
-    }
+	public double getY() {
+		return coordinates[1];
+	}
 
-    public void setX(double x) {
-        coordinates[0] = x;
-    }
+	public void setX(double x) {
+		coordinates[0] = x;
+	}
 
-    public void setY(double y) {
-        coordinates[1] = y;
-    }
+	public void setY(double y) {
+		coordinates[1] = y;
+	}
 
-    /**
-     * Returns the measure value of the point
-     *
-     * @return the point value
-     */
-    public double getLrsValue() {
-    	double d = 0;
-    	
-    	try {
-    		d = lrsValue.doubleValue();
-    	} catch (NullPointerException e) {
+	/**
+	 * Returns the measure value of the point
+	 *
+	 * @return the point value
+	 */
+	public double getLrsValue() {
+		double d = 0;
+
+		try {
+			d = mValue.doubleValue();
+		} catch (NullPointerException e) {
 			System.out.println("No Value");
 		}
 		return d;
-    }
+	}
 
-    /**
-     * Returns the point dimension
-     *
-     * @return the dimension
-     */
-    public int getDimension() {
-        return d;
-    }
+	/**
+	 * Returns the point dimension
+	 *
+	 * @return the dimension
+	 */
+	public int getDimension() {
+		return d;
+	}
 
-    // HIER FANGEN JETZT DIE METHODEN AN.. GLAUBE ICH...
-    // -> das ist richtig
+	// HIER FANGEN JETZT DIE METHODEN AN.. GLAUBE ICH...
+	// -> das ist richtig
 
-    // vererbt von Geometrie
-    public String getWKT() {
-        /*
-        get WKT only if it's a valid dimension (2D, 2D+ M, 3D, 3D + M) https://en.wikipedia.org/wiki/Well-known_text
-        'Coordinates for geometries may be 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) with an m value
-        that is part of a linear referencing system or 2D with an m value (x, y, m).'
-        */
-    	System.out.println(lrsValue == null);
-        if (d > 1 && d < 4) {
-            String wkt = "POINT ";
-            if (d == 3) {
-            	wkt += 'Z';
-            }
-            if (lrsValue != null) {
-            	wkt += 'M';
-            }
-            wkt += '(';
-            for (int j = 0; j < coordinates.length; j++) {
+	// vererbt von Geometrie
+	@Override
+	public String getWKT() {
+		/*
+		 * get WKT only if it's a valid dimension (2D, 2D+ M, 3D, 3D + M)
+		 * https://en.wikipedia.org/wiki/Well-known_text 'Coordinates for geometries may
+		 * be 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) with an m value that is part of a
+		 * linear referencing system or 2D with an m value (x, y, m).'
+		 */
+		System.out.println(mValue == null);
+		if (d > 1 && d < 4) {
+			String wkt = "POINT ";
+			if (d == 3) {
+				wkt += 'Z';
+			}
+			if (mValue != null) {
+				wkt += 'M';
+			}
+			wkt += '(';
+			for (int j = 0; j < coordinates.length; j++) {
 				double i = coordinates[j];
 				wkt += String.valueOf(i);
 				if (j < coordinates.length - 1) {
 					wkt += " ";
 				}
 			}
-            //TODO: loop through coords
-            wkt += ")";
-            return wkt;
-        }
-        else {
-            // TODO: no WKT representation exception
-            // inform user that point can't be represented in wkt because of wrong dimension 1D or 4D or higher
-            return null;
-        }
-    }
-
+			wkt += ")";
+			return wkt;
+		} else {
+			// throw exception
+			return null;
+		}
+	}
 
 //	// Distanz von diesem zu einem anderen Punkt
 //	// Parameter b: anderer Punkt
@@ -171,19 +192,19 @@ public class Point implements Geometry {
 //		return angle;
 //	}
 
-    // Fläche
-    public double Area() {
-        return 0;
-    }
+	// Fläche
+	public double Area() {
+		return 0;
+	}
 
-    // Ausdehnung
-    public double Extent() {
-        return 0;
-    }
+	// Ausdehnung
+	public double Extent() {
+		return 0;
+	}
 
-    // Zentriod
-    // public double Centroid() {
-    // ? return this; }
+	// Zentriod
+	// public double Centroid() {
+	// ? return this; }
 
 //	// Methode, um Objekte vergleichen -> Hier Punkt mit Referenzpunkt b
 //	public boolean equals(Object o) {
@@ -191,19 +212,5 @@ public class Point implements Geometry {
 //		return ((this.getX() == b.getX())) && ((this.getY() == b.getX()));
 //
 //	}
-
-    @Override
-    public String getInfo() {
-        // TODO this will be moved to the feature as the geometry should not have additional information itself
-        return null;
-    }
-
-	@Override
-	public Polygon buffer(double range) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-   
 
 }

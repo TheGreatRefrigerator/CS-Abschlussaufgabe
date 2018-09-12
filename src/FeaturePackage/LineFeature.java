@@ -1,11 +1,31 @@
 package FeaturePackage;
 
+import GeometryFactory.Geometry;
 import GeometryFactory.Polygon;
 
 public class LineFeature implements Feature{
 
-    @Override
-    public Polygon buffer() {
-        return null;
-    }
+	@Override
+	public Geometry getGeometry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Polygon buffer(double range) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getWKT() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

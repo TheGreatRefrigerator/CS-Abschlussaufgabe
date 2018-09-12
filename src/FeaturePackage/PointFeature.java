@@ -6,14 +6,13 @@ import GeometryFactory.Polygon;
 public class PointFeature implements Feature {
 	private String name;
     private Point geometry;
-    private String info;
+	private String info;
 
     public PointFeature(String wkt) {
     	
-        //TODO: create poits from multiple wkts and save in Point[] attribute
+        //TODO: create points from multiple wkts and save in Point[] attribute
 
     }
-    s
     public String getName() {
     	return name;
     }
