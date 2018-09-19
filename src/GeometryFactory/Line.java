@@ -12,22 +12,28 @@ public class Line implements Geometry {
 	/**
 	 * Constructor will take any amount of Points because of the ...(spread)
 	 * operator
-	 * 
 	 * @param points - The array of Points
 	 */
 	public Line(Point... points) { // Line, weil der Konstruktor wie die KLasse heißen muss
-		int dimension;
+		d = 0;
+		boolean M = true;
 		// check if all points have the same dimension
 		for (Point p : points) {
-			if (d) { //TODO
-				dimension = p.getDimension();
+            try {
+                p.getLrsValue();
+            } catch (NullPointerException e) {
+                M = false;
+            }
+
+			if (d == 0) { //TODO
+				d = p.getDimension();
 			} else {
 				if (p.getDimension() != d) {
 					// TODO throw Exception
+
 				}
 			}
 		}
-		d = dimension;
 		// set the points Attribute
 		this.points = points;
 	}
@@ -55,15 +61,10 @@ public class Line implements Geometry {
 		return points;
 	}
 
-	public Line() {
-
-	}
-
-	// METHODEN
+	// METHODS
 
 	/**
 	 * Returns the starting point of a line
-	 * 
 	 * @return the starting point
 	 */
 	public Point getStart() {
@@ -73,14 +74,22 @@ public class Line implements Geometry {
 
 	/**
 	 * Returns the Endpoint of a Line
-	 * 
 	 * @return the Endpoint
 	 */
 	public Point getEnd() {
 		return points[points.length - 1];
 	}
 
-	// Returns WKT Repräsentation des line string
+    /**
+     * Returns a Point at a specific position in the Line
+     * @param position - the point number (start = 1, next Point = 2 ...)
+     * @return {Point} - Point at requested Position
+     */
+	public Point getPoint(int position) {
+	    return points[position - 1];
+    }
+
+	// Returns WKT representation of the Linestring
 	@Override
 	public String getWKT() {
 		if (d > 1 && d < 4) {
@@ -89,9 +98,9 @@ public class Line implements Geometry {
 				wkt += 'Z';
 			}
 			
-			if (get. != null) {
-				
-			}
+//			if (get. != null) {
+//
+//			}
 		} else {
 			// throw exception
 		}
@@ -103,7 +112,6 @@ public class Line implements Geometry {
 
 	/**
 	 * Set a new starting point for the line
-	 * 
 	 * @param start - the new starting point
 	 */
 	public void setStart(Point start) {
@@ -112,12 +120,20 @@ public class Line implements Geometry {
 
 	/**
 	 * Set a new Endpoint for the line
-	 * 
 	 * @param end - the new endpoint
 	 */
 	public void setEnd(Point end) {
 		points[points.length - 1] = end;
 	}
+
+    /**
+     * Set move a Point to a new position
+     * @param number - the point number to change
+     * @param {Point} point - the new point
+     */
+	public void setPoint(int number, Point point) {
+	    points[number - 1] = point;
+    }
 
 	// TODO do we need this for Lines ?
 //	// Fläche einer Geometrie
@@ -125,9 +141,9 @@ public class Line implements Geometry {
 //		return 0;
 //	}
 
-	// Ausdehnung
-	public double Extent() {
-		return Double.parseDouble(null); /* start.distanceTo(end); */
-	};
+//	// Ausdehnung
+//	public double Extent() {
+//		return Double.parseDouble(null); /* start.distanceTo(end); */
+//	};
 
 }

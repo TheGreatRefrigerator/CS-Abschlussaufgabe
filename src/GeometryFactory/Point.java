@@ -9,15 +9,11 @@ public class Point implements Geometry {
 							// https://en.wikipedia.org/wiki/Linear_referencing
 	private String wktType;
 
-	public String getWktType() {
-		return wktType;
-	}
-
-	public void setWktType(String wktType) {
-		this.wktType = wktType;
-	}
-
-	// KonstruktorI mit 2 Argumenten (Koordinaten)
+    /**
+     * Create Point from coordinates with double values
+     * @param coords - the coordinates array
+     *
+     */
 	public Point(double... coords) {
 		mValue = null;
 		d = 0;
@@ -25,31 +21,24 @@ public class Point implements Geometry {
 		for (double i : coords) {
 			d++;
 		}
-		if (d < 4 && d > 1) {
-			if (d == 2 && mValue == null) {
-				wktType = "Normal";
-			} else if (d == 3) {
-				wktType = "Z";
-			}
-			if (mValue != null) {
-				wktType += "M";
-			}
-		} else {
-			wktType = null;
-		}
+        wktType = Helper.getWktType(d);
 
 	}
 
-	// KonstruktorI mit 2 Argumenten (Koordinaten)
+    /**
+     *
+     * @param lrsValue
+     * @param coords
+     */
 	public Point(double lrsValue, double... coords) {
-		this.mValue = new Double(lrsValue);
+		this.mValue = lrsValue;
 		coordinates = coords;
 		d = 0;
 		for (double i : coords) {
 			d++;
 		}
+        wktType = Helper.getWktType(d, mValue);
 	}
-
 	// KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
 //    public Point(double[] coords) { // coords = Array-Name
 //        coordinates = coords;
@@ -74,7 +63,6 @@ public class Point implements Geometry {
 
 	/**
 	 * Returns the point coordinates
-	 *
 	 * @return the coordinates double array
 	 */
 	public double[] getCoordinates() {
@@ -83,7 +71,6 @@ public class Point implements Geometry {
 
 	/**
 	 * Sets the value for a specific coordinate
-	 * 
 	 * @param position - the dimensional position (x = 1, y = 2 ...)
 	 * @param value    - the new value
 	 */
@@ -135,6 +122,9 @@ public class Point implements Geometry {
 		return d;
 	}
 
+	public String getWktType() {
+		return wktType;
+	}
 	// HIER FANGEN JETZT DIE METHODEN AN.. GLAUBE ICH...
 	// -> das ist richtig
 

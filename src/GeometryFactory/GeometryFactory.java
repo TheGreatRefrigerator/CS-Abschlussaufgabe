@@ -4,7 +4,7 @@ import Exceptions.WKTDimensionalException;
 
 public class GeometryFactory {
 
-	public static Point createPoint(String wktString) {
+	public static Point createPoint(String wktString) throws WKTDimensionalException {
 		String[] wkt = wktString.split("[()]");
 
 		// ok this might seem a little complicated :) this is the short writing of the
@@ -23,23 +23,52 @@ public class GeometryFactory {
 		 */
 		// just for checking
 		System.out.println(type);
-		
-		// TODO check if type is POINT, POINT Z, POINT M or POINT ZM and else return
-		// exception that wkt is no
-		// TODO valid point wkt
 
 		// split coords at ' ' to get single values
-		String[] coordinates = wkt[1].split(" ");
+		String[] values = wkt[1].split(" ");
+
+		// check if wkt is valid
+		switch (type) {
+			case "Normal":
+				if (values.length != 2) throw new WKTDimensionalException();
+				break;
+			case "M":
+				if (values.length != 3) throw new WKTDimensionalException();
+				break;
+			case "Z":
+				if (values.length != 3) throw new WKTDimensionalException();
+				break;
+			case "ZM":
+				if (values.length != 4) throw new WKTDimensionalException();
+				break;
+		}
+
+		// TODO check if type is POINT, POINT Z, POINT M or POINT ZM and else return
+		if (type.equals("M") || type.equals("ZM")){
+			// get measure value aka last element of
+			double m = Double.parseDouble(values[values.length - 1]);
+			double[] newCoords = new double[values.length - 1];
+			for (int i = 0; i < values.length - 1; i++) {
+				newCoords[i] = Double.parseDouble(values[i]);
+			}
+			return new Point(m, newCoords);
+		}
+
+		for (String cord : values) {
+			System.out.print(cord + ", ");
+		}
+		System.out.println();
+		System.out.println();
 
 		// create new double array to save the values that are still in string format
-		double[] coord = new double[coordinates.length];
+		double[] coord = new double[values.length];
 		
 		
 		
 
 		// loop through and convert string values to doubles
 		for (int i = 0; i < coord.length; i++) {
-			coord[i] = Double.parseDouble(coordinates[i]);
+			coord[i] = Double.parseDouble(values[i]);
 		}
 
 		// make a new point from the now double coords and return it.
@@ -50,12 +79,21 @@ public class GeometryFactory {
 	 * Creates a new Point with exactly the same constructor as in Point.java for
 	 * arbitrary dimensions
 	 * 
-	 * @param coords
-	 *            - the n dimensional coordinates
-	 * @return - the created Point
+	 * @param coords - the n dimensional coordinates
+	 * @return {Point} - the created Point
 	 */
 	public static Point createPoint(double... coords) {
 		return new Point(coords);
+	}
+
+	/**
+	 * Creates a new Point with measure value and arbitrary dimensions
+	 * @param m - the measure value
+	 * @param coords - the n dimensional coordinates
+	 * @return {Point} - the created Point
+	 */
+	public static Point createPointM(double m, double... coords) {
+		return new Point(m, coords);
 	}
 
 	// we will not need this as the above constructor does exactly the same
@@ -98,9 +136,29 @@ public class GeometryFactory {
 		return new Line(pointArray);
 	}
 
-	public static Line createLine(double... coords) {
-		return new Line();
+	/**
+	 * Create Line from Coordinates Array
+	 * @param coords - Array of Coordinate Arrays ([[x1,y1,..],[x2,y2,..],..)
+	 * @return {Line} - the created Line
+	 */
+	public static Line createLine(double[]... coords) {
+		Point[] pointArray = new Point[coords.length];
+		for (int i = 0; i < coords.length; i++) {
+			pointArray[i] = createPoint(coords[i]);
+		}
+		return new Line(pointArray);
 	}
+
+	/**
+	 * Create Line from Points
+	 * @param points - Array of Points for the Line
+	 * @return {Line} - created Line
+	 */
+	public static Line createLine(Point... points) {
+		return new Line(points);
+	}
+
+
 
 	public static Polygon createPolygon(String wkt) {
 		return new Polygon(wkt);
