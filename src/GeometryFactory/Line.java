@@ -14,7 +14,7 @@ public class Line implements Geometry {
 	 * operator
 	 * @param points - The array of Points
 	 */
-	public Line(Point... points) { // Line, weil der Konstruktor wie die KLasse heißen muss
+	public Line(Point... points) { 
 		d = 0;
 		boolean M = true;
 		// check if all points have the same dimension
@@ -38,8 +38,7 @@ public class Line implements Geometry {
 		this.points = points;
 	}
 
-	// Konstruktor mit Koordinaten // wenn wir neue Punkte mit Koordinaten
-	// definieren wollen
+	// Create Line with coordinates
 	// Start: (x1/y1)
 	// End: (x2/y2)
 
@@ -136,12 +135,12 @@ public class Line implements Geometry {
     }
 
 	// TODO do we need this for Lines ?
-//	// Fläche einer Geometrie
+//	// Area of a geometry
 //	public double Area() {
 //		return 0;
 //	}
 
-//	// Ausdehnung
+//	// Expansion
 //	public double Extent() {
 //		return Double.parseDouble(null); /* start.distanceTo(end); */
 //	};

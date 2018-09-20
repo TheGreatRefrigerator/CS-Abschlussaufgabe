@@ -1,26 +1,30 @@
 package GeometryFactory;
 
-// import Bibliotheken 
-import java.util.ArrayList; // notwendig? 
+import java.util.ArrayList; 
 import java.util.List;
 
 public class Polygon implements Geometry {
 	private String info;
 
-	// Initialvariablen
-	private List<Point> points; // Typ Liste + Typ innerhalb der Liste (hier: Punkt; muss einheitlich sein)
+	// Variables
+	private List<Point> points; 
 
-	// Konstruktor mit einer Liste von Punkten
-	// Parameter: punkte der Punktliste
+
+	/**
+	 * Creates Polygon from List of Points
+	 * @param points - list of points 
+	 */
 	public Polygon(List<Point> points) {
 		this.points = points;
 	}
 
-	// Konstruktor mit einem Array von Punkten
-	// Parameter: Array von Punkten
+
+	/**
+	 * Creates Polygon from Point Array
+	 * @param points - Point Array
+	 */
 	public Polygon(Point[] points) {
-		for (Point p : points) { // Iterieren durch Array, nenne in jeder Iteration den aktuellen Eintrag p ->
-									// Iteration 1: Stelle 0; Iteration 2: Stelle 1.....
+		for (Point p : points) { 
 			this.points.add(p);
 		}
 	}
@@ -28,10 +32,10 @@ public class Polygon implements Geometry {
 	public Polygon(String wkt) {
 	}
 
-	// METHODEN
+	// METHODs
 
-	// Getter, der die Polygon-Punkte zurückgibt
-	public List<Point> getPoints() { // List<Point> -> R�ckgabetyp
+	// Getter
+	public List<Point> getPoints() { 
 		return this.points;
 	}
 
@@ -46,7 +50,7 @@ public class Polygon implements Geometry {
 		return wkt;
 	}
 
-	// Zentriod
+	// Centroid
 	public Point Centroid() {
 		double x_centroid = 0.0, y_centroid = 0.0;
 		for (Point p : points) {

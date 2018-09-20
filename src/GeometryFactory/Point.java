@@ -2,7 +2,7 @@ package GeometryFactory;
 
 public class Point implements Geometry {
 
-	// Initialvariablen
+	// variables
 	private double[] coordinates;
 	private int d; // dimension
 	private Double mValue; // see https://en.wikipedia.org/wiki/Well-known_text and
@@ -39,7 +39,7 @@ public class Point implements Geometry {
 		}
         wktType = Helper.getWktType(d, mValue);
 	}
-	// KonstruktorII mit einem double Array, der die Koordinaten beinhaltet
+	// Constructor II with a double array, which contains the coordinates
 //    public Point(double[] coords) { // coords = Array-Name
 //        coordinates = coords;
 //        d = 0;
@@ -48,8 +48,8 @@ public class Point implements Geometry {
 //        }
 //    }
 	// TODO: copyconstructor for point with coordinates array
-	// Konstruktor für deep-copy von Punkt (-> Punkt b)
-	// Parameter p: der zu kopierende Punkt
+	// Constructor for deep-copy of point  (-> point b)
+	// Parameter p: Point that shall be copied
 //	public Point(Point p) {
 //		x = p.x;
 //		y = p.y;
@@ -125,10 +125,12 @@ public class Point implements Geometry {
 	public String getWktType() {
 		return wktType;
 	}
-	// HIER FANGEN JETZT DIE METHODEN AN.. GLAUBE ICH...
-	// -> das ist richtig
+	
+	
+	
+	// METHODS
 
-	// vererbt von Geometrie
+	// Override from Geometry
 	@Override
 	public String getWKT() {
 		/*
@@ -162,9 +164,9 @@ public class Point implements Geometry {
 		}
 	}
 
-//	// Distanz von diesem zu einem anderen Punkt
-//	// Parameter b: anderer Punkt
-//	// return: Distanz
+//	// Distance from this point to another
+//	// Parameter b: other Point
+//	// return: distance
 //	public double distanceTo(Point b) {
 //		double a_quadrat = Math.pow(b.getX() - getX(), 2); // wuuuhu!
 //		double b_quadrat = Math.pow(b.getY() - getY(), 2);
@@ -172,9 +174,9 @@ public class Point implements Geometry {
 //		return dist;
 //	}
 //
-//	// Winkel zwischen diesem und einem weiteren Punkt
-//	// Parameter b: anderer Punkt
-//	// return: Winkel in Grad
+//	// Angle between this point and another
+//	// Parameter b: other point
+//	// return: angle in degree
 //	public double getAngle(Point p) {
 //		double angle = Math.toDegrees(Math.atan2(p.y - this.getY(), p.x - this.getX()));
 //		if (angle < 0)
@@ -182,21 +184,21 @@ public class Point implements Geometry {
 //		return angle;
 //	}
 
-	// Fläche
+	// Area
 	public double Area() {
 		return 0;
 	}
 
-	// Ausdehnung
+	// Expansion
 	public double Extent() {
 		return 0;
 	}
 
-	// Zentriod
+	// Centroid
 	// public double Centroid() {
 	// ? return this; }
 
-//	// Methode, um Objekte vergleichen -> Hier Punkt mit Referenzpunkt b
+//	// Method for comparing objects -> here Point with reference point b
 //	public boolean equals(Object o) {
 //		Point b = (Point) o;
 //		return ((this.getX() == b.getX())) && ((this.getY() == b.getX()));

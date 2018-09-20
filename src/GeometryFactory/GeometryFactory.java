@@ -159,11 +159,20 @@ public class GeometryFactory {
 	}
 
 
-
+	/**
+	 * Create Polygon from String wkt 
+	 * @param wkt - String wkt 
+	 * @return - created Polygon
+	 */
 	public static Polygon createPolygon(String wkt) {
 		return new Polygon(wkt);
 	}
 
+	/**
+	 * Create Polygon from coordinates
+	 * @param coords - Array of Coordinates for the Polygon
+	 * @return - created Polygon
+	 */
 	public static Polygon createPolygon(double... coords) {
 		return new Polygon();
 	}
