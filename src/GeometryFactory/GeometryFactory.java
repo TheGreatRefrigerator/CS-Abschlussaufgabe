@@ -3,9 +3,14 @@ package GeometryFactory;
 import Exceptions.WKTDimensionalException;
 
 public class GeometryFactory {
-
-	public static Point createPoint(String wktString) throws WKTDimensionalException {
-		String[] wkt = wktString.split("[()]");
+	/**
+	 * Creates a Point Geometry from a wktString and checks it for validity
+	 * @param wktPoint - the Point WKT String
+	 * @return {Point} - the created Point
+	 * @throws WKTDimensionalException - in case of wrong WKT format
+	 */
+	public static Point createPoint(String wktPoint) throws WKTDimensionalException {
+		String[] wkt = wktPoint.split("[()]");
 
 		// ok this might seem a little complicated :) this is the short writing of the
 		// below
@@ -13,28 +18,24 @@ public class GeometryFactory {
 		// variable = (if this) ? (assign this) : (else assign this);
 		// this is called a shorthand if ->
 		// https://stackoverflow.com/questions/4461996/short-if-else-statement
-		String type = wkt[0].split(" ").length == 2 ? wkt[0].split(" ")[1] : "Normal";
+		String type = wkt[0].split(" ").length == 2 ? wkt[0].split(" ")[1] : "";
 
 		/*
 		 * //Create a type variable for the point type String type; // if you split
 		 * "POINT " at " ", length will be 1, if you split "POINT Z" length will be 2 ->
 		 * ["POINT","Z"] if (wkt[0].split(" ").length == 2) type = wkt[0].split(" ")[1];
-		 * else type = "Normal";
+		 * else type = "";
 		 */
-		// just for checking
-		System.out.println(type);
 
 		// split coords at ' ' to get single values
 		String[] values = wkt[1].split(" ");
 
 		// check if wkt is valid
 		switch (type) {
-			case "Normal":
+			case "":
 				if (values.length != 2) throw new WKTDimensionalException();
 				break;
 			case "M":
-				if (values.length != 3) throw new WKTDimensionalException();
-				break;
 			case "Z":
 				if (values.length != 3) throw new WKTDimensionalException();
 				break;
@@ -42,10 +43,9 @@ public class GeometryFactory {
 				if (values.length != 4) throw new WKTDimensionalException();
 				break;
 		}
-
-		// TODO check if type is POINT, POINT Z, POINT M or POINT ZM and else return
-		if (type.equals("M") || type.equals("ZM")){
-			// get measure value aka last element of
+		// If its a point with measure value, use Constructor with m
+		// get measure value aka last element of values array as wkt is POINT {Z}M (X Y {Z} ->M<-)
+		if (type.contains("M")){
 			double m = Double.parseDouble(values[values.length - 1]);
 			double[] newCoords = new double[values.length - 1];
 			for (int i = 0; i < values.length - 1; i++) {
@@ -54,18 +54,9 @@ public class GeometryFactory {
 			return new Point(m, newCoords);
 		}
 
-		for (String cord : values) {
-			System.out.print(cord + ", ");
-		}
-		System.out.println();
-		System.out.println();
-
 		// create new double array to save the values that are still in string format
 		double[] coord = new double[values.length];
 		
-		
-		
-
 		// loop through and convert string values to doubles
 		for (int i = 0; i < coord.length; i++) {
 			coord[i] = Double.parseDouble(values[i]);
@@ -86,6 +77,11 @@ public class GeometryFactory {
 		return new Point(coords);
 	}
 
+	// we will not need this as the above constructor does exactly the same
+	// public static Point createPoint(double[] coords) {
+	// return new Point(coords);
+	// }
+
 	/**
 	 * Creates a new Point with measure value and arbitrary dimensions
 	 * @param m - the measure value
@@ -96,15 +92,17 @@ public class GeometryFactory {
 		return new Point(m, coords);
 	}
 
-	// we will not need this as the above constructor does exactly the same
-	// public static Point createPoint(double[] coords) {
-	// return new Point(coords);
-	// }
 
-	// Line-WKT splitten...
+	/**
+	 * Creates a Line Geometry from a wktString and checks it for validity
+	 * @param wktLine - the Line WKT String
+	 * @return {Line} - the created Point
+	 * @throws WKTDimensionalException - in case of wrong WKT format
+	 */
 	public static Line createLine(String wktLine) throws WKTDimensionalException {
+		// split wkt line on '(' and ')' so "LINESTRING (12 31, 2 4, 2 1, 12 0)" will be "LINESTRING ", "12 31, 2 4, 2 1, 12 0"
 		String[] wkt = wktLine.split("[()]");
-//		"LINESTRING (12 31, 2 4, 2 1, 12)" -> "LINESTRING ", "12 31, 2 4, 2 1, 12"
+		// split second entry of wkt to get array of points "21 31", "2 4", "2 1", "12 0"
 		String[] points = wkt[1].split(",");
 		
 		// creates a array of Points with as many points as there are in the wkt string
@@ -119,12 +117,11 @@ public class GeometryFactory {
 			// create array to save the double values of the coords
 			double[] pointValues = new double[coords.length];
 
-			// wenn wir dimensionstechnisch flexibel sein wollen
+			// if we want to support arbitrary dimensions
 			for (int x = 0; x < coords.length; x++) {
-				// ...und in Double umwandeln
-//				System.out.println(value[x]);
-				String svalue = coords[x];
-				pointValues[x] = Double.parseDouble(svalue);
+				// convert to double
+				String stringValue = coords[x];
+				pointValues[x] = Double.parseDouble(stringValue);
 			}
 			
 			// create new point with double coord array and append to the Point array
@@ -132,7 +129,7 @@ public class GeometryFactory {
 			
 
 		}
-		// return the newly from the pointArray created Line
+		// return the from the pointArray created Line
 		return new Line(pointArray);
 	}
 

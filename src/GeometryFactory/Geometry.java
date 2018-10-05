@@ -1,8 +1,10 @@
 package GeometryFactory;
 
+import Exceptions.WKTRepresentationException;
+
 public interface Geometry {
 
-	public String getWKT();
+	public String getWKT() throws WKTRepresentationException;
 	// Fläche einer Geometrie
 //		public double Area(); 
 

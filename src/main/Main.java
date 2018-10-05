@@ -1,6 +1,7 @@
 package main;
 
 import Exceptions.WKTDimensionalException;
+import Exceptions.WKTRepresentationException;
 import GeometryFactory.Point;
 import GeometryFactory.GeometryFactory;
 import GeometryFactory.Line;
@@ -9,11 +10,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Yay, it works like this
-		Point p = GeometryFactory.createPoint(new double[] { 23.4, 123.2, 3, 42, 1, 54, 3 });
+		Point p = GeometryFactory.createPoint(23.4, 123.2, 3, 42, 1, 54, 3);
 		Point m = GeometryFactory.createPointM( 2, 1232, 33);
 		Point q = null;
 		try {
-			q = GeometryFactory.createPoint("POINT M(30 10 2 2)");
+			q = GeometryFactory.createPoint("POINT M(30 10 9 2)");
 		} catch (WKTDimensionalException e) {
 			e.printStackTrace();
 		}
@@ -28,7 +29,11 @@ public class Main {
 		for (double cord : m.getCoordinates()) {
 			System.out.print(cord + ", ");
 		}
-		System.out.println(m.getWKT());
+		try {
+			System.out.println(m.getWKT());
+		} catch (WKTRepresentationException e) {
+			e.printStackTrace();
+		}
 		System.out.println("Point m's value:" + m.getLrsValue());
 
 		System.out.println("Point q coords should be 30 10");
@@ -36,7 +41,11 @@ public class Main {
 			System.out.print(cord + ", ");
 		}
 		System.out.println("Point q's value: " + q.getLrsValue());
-
+//		TODO test functions of Point (eg. Point m or p) like m.getX()
+//		System.out.println(m.getLrsValue());
+//		m.getCoordinates();
+//		TODO test Line creation
+//		Line pmLine = GeometryFactory.createLine(p,m);
 //		Line l;
 //		try {
 //			l = GeometryFactory.createLine("LINESTRING ZM(12 31 23 1,2 4 3 1,2 1 22 1,12 2 132 1)");
@@ -46,11 +55,14 @@ public class Main {
 //			}
 //
 //		} catch (WKTDimensionalException e) {
-//			System.out.println("Schade wars");
 //			e.printStackTrace();
 //		}
 //        Geometry point = GeometryFactory.createGeomFromWKT("POINT");
-		System.out.println(p.getWKT());
+		try {
+			System.out.println(p.getWKT());
+		} catch (WKTRepresentationException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package FeaturePackage;
 
+import Exceptions.WKTRepresentationException;
 import GeometryFactory.Point;
 import GeometryFactory.Polygon;
 
@@ -35,8 +36,7 @@ public class PointFeature implements Feature {
 	}
 
 	@Override
-	public String getWKT() {
-		
+	public String getWKT() throws WKTRepresentationException {
 		return geometry.getWKT();
 	}
 	

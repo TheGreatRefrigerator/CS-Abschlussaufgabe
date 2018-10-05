@@ -10,9 +10,7 @@ public class Helper {
     public static String getWktType(int dimension, Double mValue) {
         String wktType = "";
         if (dimension < 4 && dimension > 1) {
-            if (dimension == 2 && mValue == null) {
-                wktType = "Normal";
-            } else if (dimension == 3) {
+            if (dimension == 3) {
                 wktType = "Z";
             }
             if (mValue != null) {

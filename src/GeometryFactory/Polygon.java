@@ -1,6 +1,6 @@
 package GeometryFactory;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Polygon implements Geometry {
@@ -24,7 +24,7 @@ public class Polygon implements Geometry {
 	 * @param points - Point Array
 	 */
 	public Polygon(Point[] points) {
-		for (Point p : points) { 
+		for (Point p : points) {
 			this.points.add(p);
 		}
 	}
@@ -32,7 +32,7 @@ public class Polygon implements Geometry {
 	public Polygon(String wkt) {
 	}
 
-	// METHODs
+	// Methods
 
 	// Getter
 	public List<Point> getPoints() { 
