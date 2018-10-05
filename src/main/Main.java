@@ -5,6 +5,7 @@ import Exceptions.WKTRepresentationException;
 import GeometryFactory.Point;
 import GeometryFactory.GeometryFactory;
 import GeometryFactory.Line;
+import GeometryFactory.Polygon;
 
 public class Main {
 
@@ -35,7 +36,15 @@ public class Main {
 			
 			e1.printStackTrace();
 		}
-	
+
+		Point x1 = GeometryFactory.createPoint(3,4);
+		Point x2 = GeometryFactory.createPoint(4,5);
+		Point x3 = GeometryFactory.createPoint(6,2);
+
+		Point[] polyPoints = {x1,x2,x3,x1};
+
+		Polygon poly = GeometryFactory.createPolygon(polyPoints);
+
 
 		System.out.println(n.is(m));
 		n.setX(32);

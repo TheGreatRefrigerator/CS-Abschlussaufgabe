@@ -155,6 +155,13 @@ public class GeometryFactory {
 		return new Line(points);
 	}
 
+	/**
+	 * Create Polygon from Point array
+	 * First and Last Points need to be the same
+	 * @param points - Points array
+	 * @return {Polygon} - the created Polygon
+	 */
+	public static Polygon createPolygon(Point... points) { return new Polygon(points); }
 
 	/**
 	 * Create Polygon from String wkt 
