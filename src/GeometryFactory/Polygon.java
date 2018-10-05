@@ -9,14 +9,45 @@ public class Polygon implements Geometry {
 	private int d;
 	private String wktType;
 
-//	/**
-//	 * Creates Polygon from List of Points
-//	 * @param points - list of points
-//	 */
-//	public Polygon(Point... points) {
-//		this.points = points;
-//	}
-//
+	/**
+	 * Creates Polygon from List of Points
+	 * @param points - list of points
+	 */
+//	[Punkt1, Punkt2, Punkt3]
+
+	public Polygon(Point... points) {
+		if (points.length > 3) {
+			Point first = points[0];
+			Point last = points[points.length - 1];
+			// If the first and last point is equal -> accept points array
+			if (first.is(last)) {
+				d = 0;
+				boolean M = true;
+				// check if all points have the same dimension
+				for (Point p : points) {
+					try {
+						p.getLrsValue();
+					} catch (NullPointerException e) {
+						M = false;
+					}
+
+					if (d == 0) { //TODO
+						d = p.getDimension();
+					} else {
+						if (p.getDimension() != d) {
+							// TODO throw Exception
+
+						}
+					}
+				}
+				this.points = points;
+			} else {
+//				TODO No closed Polygon
+			}
+		} else {
+//			TODO throw error
+		}
+	}
 
 	/**
 	 * Creates Polygon from Point Array
