@@ -18,7 +18,28 @@ public class Main {
 		} catch (WKTDimensionalException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println(p.getWktType());
+		System.out.println(p.getDimension());
+		System.out.println(p.getX());
+		p.setX(10.1);
+		System.out.println(p.getX());
+		p.setX(23.4);
+		System.out.println(p.getX());
+		
+		System.out.println(m.getWktType());
+		System.out.println(m.getDimension());
+		try {
+			System.out.println(m.getWKT());
+		} catch (WKTRepresentationException e1) {
+			
+			e1.printStackTrace();
+		}
+	
 
+		System.out.println(n.is(m));
+		n.setX(32);
+		System.out.println(n.getX());
 		System.out.println(n.is(m));
 
 		Point q = null;
@@ -72,6 +93,10 @@ public class Main {
 		} catch (WKTRepresentationException e) {
 			e.printStackTrace();
 		}
+		
+		
+		
+		
 	}
 
 }
