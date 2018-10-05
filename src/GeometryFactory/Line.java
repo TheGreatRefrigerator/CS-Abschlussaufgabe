@@ -1,9 +1,6 @@
 package GeometryFactory;
 
-import Exceptions.WKTDimensionalException;
-
 public class Line implements Geometry {
-
 	// Attributes of the Line Object
 	private Point[] points;
 	private int d;

@@ -161,16 +161,18 @@ public class GeometryFactory {
 	 * @param wkt - String wkt 
 	 * @return - created Polygon
 	 */
-	public static Polygon createPolygon(String wkt) {
-		return new Polygon(wkt);
-	}
+//	public static Polygon createPolygon(String wkt) {
+//		//TODO create point array from WKT
+//		return new Polygon(wkt);
+//	}
 
 	/**
 	 * Create Polygon from coordinates
 	 * @param coords - Array of Coordinates for the Polygon
 	 * @return - created Polygon
 	 */
-	public static Polygon createPolygon(double... coords) {
-		return new Polygon();
-	}
+//	public static Polygon createPolygon(double... coords) {
+//		//
+//		return new Polygon();
+//	}
 }

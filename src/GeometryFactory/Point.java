@@ -2,9 +2,10 @@ package GeometryFactory;
 
 import Exceptions.WKTRepresentationException;
 
-public class Point implements Geometry {
+import java.util.Arrays;
 
-    // variables
+public class Point implements Geometry {
+    // Attributes of the Point Geometry
     private double[] coordinates;
     private int d; // dimension
     private Double mValue; // see https://en.wikipedia.org/wiki/Well-known_text and
@@ -181,6 +182,20 @@ public class Point implements Geometry {
         }
     }
 
+    /**
+     * Checks if the Points are the same by comparing all the attributes.
+     * Returns true only if all the attributes are the same
+     * @param p - Point to compare
+     * @return {boolean} - true for same Point
+     */
+    public boolean is(Point p) {
+        return ((Arrays.equals(coordinates, p.getCoordinates())) && (d == p.getDimension()) && (mValue == p.getLrsValue()) && (wktType.equals(p.getWktType())));
+    }
+//    private double[] coordinates;
+//    private int d; // dimension
+//    private Double mValue; // see https://en.wikipedia.org/wiki/Well-known_text and
+//    // https://en.wikipedia.org/wiki/Linear_referencing
+//    private String wktType;
 //	// Distance from this point to another
 //	// Parameter b: other Point
 //	// return: distance
