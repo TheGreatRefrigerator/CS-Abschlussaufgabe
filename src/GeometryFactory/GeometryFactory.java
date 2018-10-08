@@ -1,15 +1,16 @@
 package GeometryFactory;
 
-import Exceptions.WKTDimensionalException;
+import Exceptions.DimensionalException;
+import Exceptions.WktInvalidException;
 
 public class GeometryFactory {
 	/**
 	 * Creates a Point Geometry from a wktString and checks it for validity
 	 * @param wktPoint - the Point WKT String
 	 * @return {Point} - the created Point
-	 * @throws WKTDimensionalException - in case of wrong WKT format
+	 * @throws WktInvalidException - in case of wrong WKT format
 	 */
-	public static Point createPoint(String wktPoint) throws WKTDimensionalException {
+	public static Point createPoint(String wktPoint) throws WktInvalidException {
 		String[] wkt = wktPoint.split("[()]");
 
 		// ok this might seem a little complicated :) this is the short writing of the
@@ -27,39 +28,28 @@ public class GeometryFactory {
 		 * else type = "";
 		 */
 
-		// split coords at ' ' to get single values
-		String[] values = wkt[1].split(" ");
+		// split coords at ' ' to get single coords
+		String[] coords = wkt[1].split(" ");
 
-		// check if wkt is valid
-		switch (type) {
-			case "":
-				if (values.length != 2) throw new WKTDimensionalException();
-				break;
-			case "M":
-			case "Z":
-				if (values.length != 3) throw new WKTDimensionalException();
-				break;
-			case "ZM":
-				if (values.length != 4) throw new WKTDimensionalException();
-				break;
-		}
+		// check wkt validity
+		Helper.checkWktValidity(type, coords.length);
 		// If its a point with measure value, use Constructor with m
-		// get measure value aka last element of values array as wkt is POINT {Z}M (X Y {Z} ->M<-)
+		// get measure value aka last element of coords array as wkt is POINT {Z}M (X Y {Z} ->M<-)
 		if (type.contains("M")){
-			double m = Double.parseDouble(values[values.length - 1]);
-			double[] newCoords = new double[values.length - 1];
-			for (int i = 0; i < values.length - 1; i++) {
-				newCoords[i] = Double.parseDouble(values[i]);
+			double m = Double.parseDouble(coords[coords.length - 1]);
+			double[] newCoords = new double[coords.length - 1];
+			for (int i = 0; i < coords.length - 1; i++) {
+				newCoords[i] = Double.parseDouble(coords[i]);
 			}
 			return new Point(m, newCoords);
 		}
 
-		// create new double array to save the values that are still in string format
-		double[] coord = new double[values.length];
+		// create new double array to save the coords that are still in string format
+		double[] coord = new double[coords.length];
 		
-		// loop through and convert string values to doubles
+		// loop through and convert string coords to doubles
 		for (int i = 0; i < coord.length; i++) {
-			coord[i] = Double.parseDouble(values[i]);
+			coord[i] = Double.parseDouble(coords[i]);
 		}
 
 		// make a new point from the now double coords and return it.
@@ -97,11 +87,15 @@ public class GeometryFactory {
 	 * Creates a Line Geometry from a wktString and checks it for validity
 	 * @param wktLine - the Line WKT String
 	 * @return {Line} - the created Point
-	 * @throws WKTDimensionalException - in case of wrong WKT format
+	 * @throws WktInvalidException - in case of wrong WKT format
 	 */
-	public static Line createLine(String wktLine) throws WKTDimensionalException {
+	public static Line createLine(String wktLine) throws WktInvalidException {
 		// split wkt line on '(' and ')' so "LINESTRING (12 31, 2 4, 2 1, 12 0)" will be "LINESTRING ", "12 31, 2 4, 2 1, 12 0"
 		String[] wkt = wktLine.split("[()]");
+
+		// access first entry of wkt extract the wkt type
+		String type = wkt[0].split(" ").length == 2 ? wkt[0].split(" ")[1] : "";
+
 		// split second entry of wkt to get array of points "21 31", "2 4", "2 1", "12 0"
 		String[] points = wkt[1].split(",");
 		
@@ -109,28 +103,42 @@ public class GeometryFactory {
 		Point[] pointArray = new Point[points.length];
 		
 		for (int i = 0; i < points.length; i++) {
-			
-			String[] coords = points[i].split(" ");
-			if (coords.length > 3) {
-				throw new WKTDimensionalException();
-			}
-			// create array to save the double values of the coords
-			double[] pointValues = new double[coords.length];
 
+			String[] coords = points[i].split(" ");
+
+			Helper.checkWktValidity(type, coords.length);
+
+			// if it is a point with measure value, the last value contains the  measure value
+			// So if the type has M in the name, we parse without the last value
+			boolean isMeasurePoint = type.contains("M");
+			int lengthM = isMeasurePoint ? coords.length - 1 : coords.length;
+			// create array to save the double values of the coords
+			double[] pointValues = new double[lengthM];
 			// if we want to support arbitrary dimensions
-			for (int x = 0; x < coords.length; x++) {
+			for (int x = 0; x < lengthM; x++) {
 				// convert to double
 				String stringValue = coords[x];
 				pointValues[x] = Double.parseDouble(stringValue);
 			}
-			
-			// create new point with double coord array and append to the Point array
-			pointArray[i] = new Point(pointValues);
+
+			double lrsValue = 0;
+			if (isMeasurePoint) {
+				lrsValue = Double.parseDouble(coords[lengthM]);
+			}
+			// create new point with double coord array and fill position of
+			// the Point array with this point
+			// M Points have to be generated differently as the M value is in a
+			// separate attribute
+			pointArray[i] = isMeasurePoint ? new Point(lrsValue ,pointValues) : new Point(pointValues);
 			
 
 		}
 		// return the from the pointArray created Line
-		return new Line(pointArray);
+		try {
+			return new Line(pointArray);
+		} catch (DimensionalException e) {
+			throw new WktInvalidException();
+		}
 	}
 
 	/**
@@ -138,7 +146,7 @@ public class GeometryFactory {
 	 * @param coords - Array of Coordinate Arrays ([[x1,y1,..],[x2,y2,..],..)
 	 * @return {Line} - the created Line
 	 */
-	public static Line createLine(double[]... coords) {
+	public static Line createLine(double[]... coords) throws DimensionalException {
 		Point[] pointArray = new Point[coords.length];
 		for (int i = 0; i < coords.length; i++) {
 			pointArray[i] = createPoint(coords[i]);
@@ -151,7 +159,7 @@ public class GeometryFactory {
 	 * @param points - Array of Points for the Line
 	 * @return {Line} - created Line
 	 */
-	public static Line createLine(Point... points) {
+	public static Line createLine(Point... points) throws DimensionalException {
 		return new Line(points);
 	}
 

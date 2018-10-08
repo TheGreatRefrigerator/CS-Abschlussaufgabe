@@ -115,6 +115,13 @@ public class Point implements Geometry {
     }
 
     /**
+     * Return true if the point has a M value and false if it is not defined
+     * @return
+     */
+    public boolean hasLrsValue() {
+        return !(mValue == null);
+    }
+    /**
      * Returns the measure value of the point
      *
      * @return the point value
@@ -125,7 +132,7 @@ public class Point implements Geometry {
         try {
             d = mValue;
         } catch (NullPointerException e) {
-            System.out.println("No Value");
+//            d = null
         }
         return d;
     }
@@ -155,28 +162,16 @@ public class Point implements Geometry {
          * be 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) with an m value that is part of a
          * linear referencing system or 2D with an m value (x, y, m).'
          */
-        System.out.println(mValue == null);
-        if (!wktType.isEmpty()) {
+        if (!(wktType == null)) {
             StringBuilder wkt = new StringBuilder("POINT ");
             if (!"".equals(wktType)) {
                 wkt.append(wktType).append(" ");
             }
             wkt.append('(');
-            for (int j = 0; j < coordinates.length; j++) {
-                double i = coordinates[j];
-                wkt.append(String.valueOf(i));
-                if (j < coordinates.length - 1) {
-                    wkt.append(" ");
-                }
-            }
-            // append measure value if it exists
-            if (!mValue.isNaN()) {
-                wkt.append(' ').append(mValue.toString());
-            }
-
+            Helper.buildPointCoordinatesString(wkt, this);
             wkt.append(")");
 
-            return wkt.toString();
+            return Helper.trimString(wkt.toString());
         } else {
             throw new WKTRepresentationException();
         }
@@ -189,7 +184,14 @@ public class Point implements Geometry {
      * @return {boolean} - true for same Point
      */
     public boolean is(Point p) {
-        return ((Arrays.equals(coordinates, p.getCoordinates())) && (d == p.getDimension()) && (mValue == p.getLrsValue()) && (wktType.equals(p.getWktType())));
+        boolean sameCoords = Arrays.equals(coordinates, p.getCoordinates());
+        boolean sameDimension = d == p.getDimension();
+        boolean sameWktType = wktType.equals(p.getWktType());
+        boolean isSame = sameCoords && sameWktType && sameDimension;
+        if (!(mValue == null)) {
+            isSame = isSame && (mValue == p.getLrsValue());
+        }
+        return isSame;
     }
 //    private double[] coordinates;
 //    private int d; // dimension

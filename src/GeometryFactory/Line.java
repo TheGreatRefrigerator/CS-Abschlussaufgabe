@@ -1,137 +1,171 @@
 package GeometryFactory;
 
+import Exceptions.DimensionalException;
+import Exceptions.WktInvalidException;
+import Exceptions.WKTRepresentationException;
+
 public class Line implements Geometry {
-	// Attributes of the Line Object
-	private Point[] points;
-	private int d;
-	private String wktType;
+    // Attributes of the Line Object
+    private Point[] points;
+    private int d;
+    private String wktType;
 
-	/**
-	 * Constructor will take any amount of Points because of the ...(spread)
-	 * operator
-	 * @param points - The array of Points
-	 */
-	public Line(Point... points) { 
-		d = 0;
-		boolean M = true;
-		// check if all points have the same dimension
-		for (Point p : points) {
-            try {
-                p.getLrsValue();
-            } catch (NullPointerException e) {
-                M = false;
+    /**
+     * Constructor will take any amount of Points because of the ...(spread)
+     * operator
+     *
+     * @param points - The array of Points
+     */
+    public Line(Point... points) throws DimensionalException {
+        this("init", points);
+    }
+
+    /**
+     * Constructor will take any amount of Points because of the ...(spread)
+     * operator. Optionally the known wkt type can be passed.
+     *
+     * @param wktType - The WKT Type of the Line
+     * @param points  - The array of Points
+     */
+    public Line(String wktType, Point... points) throws DimensionalException {
+        d = 0;
+        boolean wktCheck = wktType.equals("init"); // set wkt Check to true if no wktType was passed
+        // check if all points have the same dimension
+        for (int i = 0; i < points.length; i++) {
+            Point p = points[i];
+            // if it is the first time running we are at the first point
+            // get its wkt type and compare the next points wkt type with this
+            if (wktType != null && wktCheck) {
+                if (wktType.equals("init")) {
+                    wktType = p.getWktType();
+
+                } else if (!wktType.equals(p.getWktType())) {
+                    wktType = null;
+                }
             }
+            // Check points for same dimension
+            // get dimension of the first point and compare others this value
+            if (d == 0) {
+                d = p.getDimension();
+            } else {
+                // if same value keep the dimension value
+                if (p.getDimension() != d) {
+                    // else no compatible dimensions of input
+                    throw new DimensionalException(i);
+                }
+            }
+        }
+        // set the points Attribute
+        this.points = points;
+        this.wktType = wktType;
+    }
 
-			if (d == 0) { //TODO
-				d = p.getDimension();
-			} else {
-				if (p.getDimension() != d) {
-					// TODO throw Exception
+    public String getWktType() {
+        return wktType;
+    }
 
-				}
-			}
-		}
-		// set the points Attribute
-		this.points = points;
-	}
+    public void setWktType(String wktType) {
+        this.wktType = wktType;
+    }
 
-	// Create Line with coordinates
-	// Start: (x1/y1)
-	// End: (x2/y2)
+    public Point[] getPoints() {
+        return points;
+    }
 
-	public Line(int dimension, double... coords) {
+    // METHODS
 
-//		this.start = new Point(x1, y1);
-//		this.end = new Point(x2, y2);
-	}
+    /**
+     * Returns the starting point of a line
+     *
+     * @return the starting point
+     */
+    public Point getStart() {
+        return points[0];
+    } // returnt einen Punkt, keine doubles(also keine Koordinaten)
+    // der Punkt selbst hat dafür die Fähigkeit die Koordinaten anzuzeigen
 
-	public String getWktType() {
-		return wktType;
-	}
-
-	public void setWktType(String wktType) {
-		this.wktType = wktType;
-	}
-
-	public Point[] getPoints() {
-		return points;
-	}
-
-	// METHODS
-
-	/**
-	 * Returns the starting point of a line
-	 * @return the starting point
-	 */
-	public Point getStart() {
-		return points[0];
-	} // returnt einen Punkt, keine doubles(also keine Koordinaten)
-		// der Punkt selbst hat dafür die Fähigkeit die Koordinaten anzuzeigen
-
-	/**
-	 * Returns the Endpoint of a Line
-	 * @return the Endpoint
-	 */
-	public Point getEnd() {
-		return points[points.length - 1];
-	}
+    /**
+     * Returns the Endpoint of a Line
+     *
+     * @return the Endpoint
+     */
+    public Point getEnd() {
+        return points[points.length - 1];
+    }
 
     /**
      * Returns a Point at a specific position in the Line
+     *
      * @param position - the point number (start = 1, next Point = 2 ...)
      * @return {Point} - Point at requested Position
      */
-	public Point getPoint(int position) {
-	    return points[position - 1];
+    public Point getPoint(int position) {
+        return points[position - 1];
     }
 
-	// Returns WKT representation of the Linestring
-	@Override
-	public String getWKT() {
-		if (d > 1 && d < 4) {
-			String wkt = "LINESTRING ";
-			if (d == 3) {
-				wkt += 'Z';
-			}
-			
+    // Returns WKT representation of the Linestring
+    @Override
+    public String getWKT() throws WKTRepresentationException {
+        if (!(wktType == null)) {
+            StringBuilder wkt = new StringBuilder("LINESTRING ");
+            if (!"".equals(wktType)) {
+                wkt.append(wktType).append(" ");
+            }
+            wkt.append("(");
+            for (int i = 0; i < points.length; i++) {
+                Point p = points[i];
+                Helper.buildPointCoordinatesString(wkt, p);
+                if (i < points.length - 1) {
+                    wkt.append(",");
+                }
+            }
+            wkt.append(")");
 //			if (get. != null) {
-//
+            return Helper.trimString(wkt.toString());
 //			}
-		} else {
-			// throw exception
-		}
-		// TODO like in Point.java check the dimension before returning wkt and return
-		// exception if not valid
-		// TODO loop through coords and build WKT
-		return null;
-	}
+        } else {
+            throw new WKTRepresentationException();
+        }
+    }
 
-	/**
-	 * Set a new starting point for the line
-	 * @param start - the new starting point
-	 */
-	public void setStart(Point start) {
-		points[0] = start;
-	}
-
-	/**
-	 * Set a new Endpoint for the line
-	 * @param end - the new endpoint
-	 */
-	public void setEnd(Point end) {
-		points[points.length - 1] = end;
-	}
 
     /**
-     * Set move a Point to a new position
-     * @param number - the point number to change
-     * @param {Point} point - the new point
+     * Set a new starting point for the line
+     *
+     * @param start - the new starting point
      */
-	public void setPoint(int number, Point point) {
-	    points[number - 1] = point;
+    public void setStart(Point start) {
+        points[0] = start;
     }
 
-	// TODO do we need this for Lines ?
+    /**
+     * Returns the Dimension of the Line
+     * @return {int} - the dimension
+     */
+    public int getDimension() {
+        return d;
+    }
+
+    /**
+     * Set a new Endpoint for the line
+     *
+     * @param end - the new endpoint
+     */
+    public void setEnd(Point end) {
+        points[points.length - 1] = end;
+    }
+
+    /**
+     * Move a Point to a new position
+     *
+     * @param number  - the point number to change
+     * @param {Point} point - the new point
+     */
+    public void setPoint(int number, Point point) {
+        points[number - 1] = point;
+    }
+
+    // TODO do we need this for Lines ?
 //	// Area of a geometry
 //	public double Area() {
 //		return 0;
