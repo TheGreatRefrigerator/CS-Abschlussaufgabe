@@ -1,6 +1,7 @@
 package main;
 
-import Exceptions.WKTDimensionalException;
+import Exceptions.DimensionalException;
+import Exceptions.WktInvalidException;
 import Exceptions.WKTRepresentationException;
 import GeometryFactory.Point;
 import GeometryFactory.GeometryFactory;
@@ -16,10 +17,10 @@ public class Main {
 		Point n = null;
 		try {
 			n = GeometryFactory.createPoint("POINT M(1232 33 2)");
-		} catch (WKTDimensionalException e) {
+		} catch (WktInvalidException e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println(p.getWktType());
 		System.out.println(p.getDimension());
 		System.out.println(p.getX());
@@ -27,13 +28,13 @@ public class Main {
 		System.out.println(p.getX());
 		p.setX(23.4);
 		System.out.println(p.getX());
-		
+
 		System.out.println(m.getWktType());
 		System.out.println(m.getDimension());
 		try {
 			System.out.println(m.getWKT());
 		} catch (WKTRepresentationException e1) {
-			
+
 			e1.printStackTrace();
 		}
 
@@ -45,6 +46,13 @@ public class Main {
 
 		Polygon poly = GeometryFactory.createPolygon(polyPoints);
 
+		for (Point x : poly.getPoints()) {
+			try {
+				System.out.println(x.getWKT());
+			} catch (WKTRepresentationException e) {
+				e.printStackTrace();
+			}
+		}
 
 		System.out.println(n.is(m));
 		n.setX(32);
@@ -54,7 +62,7 @@ public class Main {
 		Point q = null;
 		try {
 			q = GeometryFactory.createPoint("POINT M(30 10 9 2)");
-		} catch (WKTDimensionalException e) {
+		} catch (WktInvalidException e) {
 			e.printStackTrace();
 		}
 		// Test p and q
@@ -83,29 +91,21 @@ public class Main {
 //		TODO test functions of Point (eg. Point m or p) like m.getX()
 //		System.out.println(m.getLrsValue());
 //		m.getCoordinates();
-//		TODO test Line creation
 //		Line pmLine = GeometryFactory.createLine(p,m);
-//		Line l;
-//		try {
-//			l = GeometryFactory.createLine("LINESTRING ZM(12 31 23 1,2 4 3 1,2 1 22 1,12 2 132 1)");
-//
-//			for (Point x : l.getPoints()) {
-//				System.out.println(x.getWKT() + ", " + String.valueOf(x.getLrsValue()));
-//			}
-//
-//		} catch (WKTDimensionalException e) {
-//			e.printStackTrace();
-//		}
-//        Geometry point = GeometryFactory.createGeomFromWKT("POINT");
+		Line l,s;
 		try {
-			System.out.println(p.getWKT());
-		} catch (WKTRepresentationException e) {
+			// examples for line creation
+			l = GeometryFactory.createLine("LINESTRING Z(12 31 2,2 3 3,2 1 1,12 5 1)");
+			s = GeometryFactory.createLine(new double[][] {{12,31},{2,3.432,3},{2,111,1},{12,5,1}});
+			System.out.println(s.getWktType());
+			try {
+				System.out.println(l.getWKT());
+				System.out.println(s.getWKT());
+			} catch (WKTRepresentationException e) {
+				e.printStackTrace();
+			}
+		} catch (WktInvalidException | DimensionalException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
 	}
-
 }
