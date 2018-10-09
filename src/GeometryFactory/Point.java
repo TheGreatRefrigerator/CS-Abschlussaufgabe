@@ -1,6 +1,7 @@
 package GeometryFactory;
 
 import Exceptions.WKTRepresentationException;
+import Exceptions.WktInvalidException;
 
 import java.util.Arrays;
 
@@ -138,6 +139,20 @@ public class Point implements Geometry {
     }
 
     /**
+     * Sets the measure Value of the point
+     * @param mValue
+     */
+    public void setLrsValue(Double mValue) {
+        this.mValue = mValue;
+        try {
+            Helper.checkWktValidity(wktType, d);
+            if (!wktType.contains("M")) {
+                wktType += 'M';
+            }
+        } catch (WktInvalidException ignored) {}
+    }
+
+    /**
      * Returns the point dimension
      *
      * @return {int} the point dimension
@@ -153,25 +168,19 @@ public class Point implements Geometry {
 
     // METHODS
 
-    // Override from Geometry
+    /**
+     * Checks if the current Geometry is Wkt Conform
+     * @return
+     */
+    @Override
+    public boolean isWktConform() {
+        return (wktType != null);
+    }
+
     @Override
     public String getWKT() throws WKTRepresentationException {
-        /*
-         * get WKT only if it's a valid dimension (2D, 2D+ M, 3D, 3D + M)
-         * https://en.wikipedia.org/wiki/Well-known_text 'Coordinates for geometries may
-         * be 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) with an m value that is part of a
-         * linear referencing system or 2D with an m value (x, y, m).'
-         */
         if (!(wktType == null)) {
-            StringBuilder wkt = new StringBuilder("POINT ");
-            if (!"".equals(wktType)) {
-                wkt.append(wktType).append(" ");
-            }
-            wkt.append('(');
-            Helper.buildPointCoordinatesString(wkt, this);
-            wkt.append(")");
-
-            return Helper.trimString(wkt.toString());
+            return Helper.buildWkt("point", new Point[] {this}, wktType);
         } else {
             throw new WKTRepresentationException();
         }
@@ -186,7 +195,7 @@ public class Point implements Geometry {
     public boolean is(Point p) {
         boolean sameCoords = Arrays.equals(coordinates, p.getCoordinates());
         boolean sameDimension = d == p.getDimension();
-        boolean sameWktType = wktType.equals(p.getWktType());
+        boolean sameWktType = p.isWktConform() ? wktType.equals(p.getWktType()) : wktType == null;
         boolean isSame = sameCoords && sameWktType && sameDimension;
         if (!(mValue == null)) {
             isSame = isSame && (mValue == p.getLrsValue());

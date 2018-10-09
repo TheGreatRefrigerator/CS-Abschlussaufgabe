@@ -1,7 +1,6 @@
 package GeometryFactory;
 
 import Exceptions.DimensionalException;
-import Exceptions.WktInvalidException;
 import Exceptions.WKTRepresentationException;
 
 public class Line implements Geometry {
@@ -13,7 +12,6 @@ public class Line implements Geometry {
     /**
      * Constructor will take any amount of Points because of the ...(spread)
      * operator
-     *
      * @param points - The array of Points
      */
     public Line(Point... points) throws DimensionalException {
@@ -23,7 +21,6 @@ public class Line implements Geometry {
     /**
      * Constructor will take any amount of Points because of the ...(spread)
      * operator. Optionally the known wkt type can be passed.
-     *
      * @param wktType - The WKT Type of the Line
      * @param points  - The array of Points
      */
@@ -68,74 +65,13 @@ public class Line implements Geometry {
         this.wktType = wktType;
     }
 
-    public Point[] getPoints() {
-        return points;
-    }
-
-    // METHODS
-
     /**
-     * Returns the starting point of a line
-     *
-     * @return the starting point
+     * Checks if the current Geometry is Wkt Conform
+     * @return
      */
-    public Point getStart() {
-        return points[0];
-    } // returnt einen Punkt, keine doubles(also keine Koordinaten)
-    // der Punkt selbst hat dafür die Fähigkeit die Koordinaten anzuzeigen
-
-    /**
-     * Returns the Endpoint of a Line
-     *
-     * @return the Endpoint
-     */
-    public Point getEnd() {
-        return points[points.length - 1];
-    }
-
-    /**
-     * Returns a Point at a specific position in the Line
-     *
-     * @param position - the point number (start = 1, next Point = 2 ...)
-     * @return {Point} - Point at requested Position
-     */
-    public Point getPoint(int position) {
-        return points[position - 1];
-    }
-
-    // Returns WKT representation of the Linestring
     @Override
-    public String getWKT() throws WKTRepresentationException {
-        if (!(wktType == null)) {
-            StringBuilder wkt = new StringBuilder("LINESTRING ");
-            if (!"".equals(wktType)) {
-                wkt.append(wktType).append(" ");
-            }
-            wkt.append("(");
-            for (int i = 0; i < points.length; i++) {
-                Point p = points[i];
-                Helper.buildPointCoordinatesString(wkt, p);
-                if (i < points.length - 1) {
-                    wkt.append(",");
-                }
-            }
-            wkt.append(")");
-//			if (get. != null) {
-            return Helper.trimString(wkt.toString());
-//			}
-        } else {
-            throw new WKTRepresentationException();
-        }
-    }
-
-
-    /**
-     * Set a new starting point for the line
-     *
-     * @param start - the new starting point
-     */
-    public void setStart(Point start) {
-        points[0] = start;
+    public boolean isWktConform() {
+        return (wktType != null);
     }
 
     /**
@@ -146,9 +82,54 @@ public class Line implements Geometry {
         return d;
     }
 
+    public Point[] getPoints() {
+        return points;
+    }
+
+    // METHODS
+
+    /**
+     * Returns the starting point of a line, NO double coords!
+     * The point itself has a method to show the coordinates
+     * @return the starting point
+     */
+    public Point getStart() {
+        return points[0];
+    }
+
+    /**
+     * Returns the Endpoint of a Line
+     * @return the Endpoint
+     */
+    public Point getEnd() {
+        return points[points.length - 1];
+    }
+
+    /**
+     * Returns a Point at a specific position in the Line
+     * @param position - the point number (start = 1, next Point = 2 ...)
+     * @return {Point} - Point at requested Position
+     */
+    public Point getPoint(int position) {
+        return points[position - 1];
+    }
+
+    // Returns WKT representation of the Linestring
+    @Override
+    public String getWKT() throws WKTRepresentationException {
+        return Helper.buildWkt("linestring", points, wktType);
+    }
+
+    /**
+     * Set a new starting point for the line
+     * @param start - the new starting point
+     */
+    public void setStart(Point start) {
+        points[0] = start;
+    }
+
     /**
      * Set a new Endpoint for the line
-     *
      * @param end - the new endpoint
      */
     public void setEnd(Point end) {
@@ -157,7 +138,6 @@ public class Line implements Geometry {
 
     /**
      * Move a Point to a new position
-     *
      * @param number  - the point number to change
      * @param {Point} point - the new point
      */

@@ -4,7 +4,8 @@ import Exceptions.WKTRepresentationException;
 
 public interface Geometry {
 
-	public String getWKT() throws WKTRepresentationException;
+	String getWKT() throws WKTRepresentationException;
+	boolean isWktConform();
 	// Fläche einer Geometrie
 //		public double Area(); 
 

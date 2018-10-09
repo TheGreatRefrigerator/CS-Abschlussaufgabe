@@ -1,81 +1,116 @@
 package GeometryFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import Exceptions.DimensionalException;
+import Exceptions.InvalidPolygonException;
+import Exceptions.WKTRepresentationException;
 
 public class Polygon implements Geometry {
-	// Attributes of the Polygon Geometry
-	private Point[] points;
-	private int d;
-	private String wktType;
+    // Attributes of the Polygon Geometry
+    private Point[] points;
+    private int d;
+    private String wktType;
 
-	/**
-	 * Creates Polygon from List of Points
-	 * @param points - list of points
-	 */
-//	[Punkt1, Punkt2, Punkt3]
+    /**
+     * Creates Polygon from List of Points
+     * @param points - list of points
+     */
+    public Polygon(Point... points) throws DimensionalException, InvalidPolygonException {
+        this("init", points);
+    }
 
-	public Polygon(Point... points) {
-		if (points.length > 3) {
-			Point first = points[0];
-			Point last = points[points.length - 1];
-			// If the first and last point is equal -> accept points array
-			if (first.is(last)) {
-				d = 0;
-				boolean M = true;
-				// check if all points have the same dimension
-				for (Point p : points) {
-					try {
-						p.getLrsValue();
-					} catch (NullPointerException e) {
-						M = false;
-					}
+    /**
+     * Creates Polygon from List of Points
+     * @param points - list of points
+     */
+    public Polygon(String wktType, Point... points) throws DimensionalException, InvalidPolygonException {
+        if (points.length > 3) {
+            Point first = points[0];
+            Point last = points[points.length - 1];
+            // If the first and last point is equal -> accept points array
+            if (first.is(last)) {
+                d = 0;
+                boolean wktCheck = wktType.equals("init"); // set wkt Check to true if no wktType was passed
+                // check if all points have the same dimension
+                // last point is the first so we don't need to check it
+                for (int i = 0; i < points.length - 1; i++) {
+                    Point p = points[i];
+                    // if it is the first time running we are at the first point
+                    // get its wkt type and compare the next points wkt type with this
+                    if (wktType != null && wktCheck) {
+                        if (wktType.equals("init")) {
+                            wktType = p.getWktType();
 
-					if (d == 0) { //TODO
-						d = p.getDimension();
-					} else {
-						if (p.getDimension() != d) {
-							// TODO throw Exception
+                        } else if (!wktType.equals(p.getWktType())) {
+                            wktType = null;
+                        }
+                    }
+                    // Check points for same dimension
+                    // get dimension of the first point and compare others this value
+                    if (d == 0) {
+                        d = p.getDimension();
+                    } else {
+                        // if same value keep the dimension value
+                        if (p.getDimension() != d) {
+                            // else no compatible dimensions of input
+                            throw new DimensionalException(i);
+                        }
+                    }
+                }
+                this.points = points;
+                this.wktType = wktType;
+            } else {
+               throw new InvalidPolygonException();
+            }
+        } else {
+            throw new InvalidPolygonException();
+        }
+    }
 
-						}
-					}
-				}
-				this.points = points;
-			} else {
-//				TODO No closed Polygon
-			}
-		} else {
-//			TODO throw error
-		}
-	}
+    public String getWktType() {
+        return wktType;
+    }
 
-	/**
-	 * Creates Polygon from Point Array
-	 * @param points - Point Array
-	 */
-//	public Polygon(Point[] points) {
-//		for (Point p : points) {
-//			this.points.add(p);
-//		}
-//	}
+    public void setWktType(String wktType) {
+        this.wktType = wktType;
+    }
 
-	// Methods
 
-	// Getter
-	public Point[] getPoints() {
-		return this.points;
-	}
+    public Point[] getPoints() {
+        return points;
+    }
 
-	// WKT
-	@Override
-	public String getWKT() {
-		String wkt = "Polygon( ";
-		for (Point p : this.points) {
-//			wkt += String.valueOf(p.getX()) + " " + String.valueOf(p.getY()) + ",";
-		}
-		wkt += ")";
-		return wkt;
-	}
+    /**
+     * Returns a Point at a specific position in the Line
+     * @param position - the point number (start = 1, next Point = 2 ...)
+     * @return {Point} - Point at requested Position
+     */
+    public Point getPoint(int position) {
+        return points[position - 1];
+    }
+
+    /**
+     * Move a Point to a new position
+     * @param number  - the point number to change
+     * @param {Point} point - the new point
+     */
+    public void setPoint(int number, Point point) {
+        points[number - 1] = point;
+    }
+
+    // WKT
+    @Override
+    public String getWKT() throws WKTRepresentationException {
+        return Helper.buildWkt("polygon", points, wktType);
+    }
+
+    /**
+     * Checks if the current Geometry is Wkt Conform
+     * @return
+     */
+    @Override
+    public boolean isWktConform() {
+        return (wktType != null);
+    }
 //
 //	// Centroid
 //	public Point Centroid() {
