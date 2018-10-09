@@ -1,31 +1,53 @@
 package FeaturePackage;
 
-import GeometryFactory.Geometry;
+import Exceptions.WKTRepresentationException;
+import Exceptions.WktInvalidException;
+import GeometryFactory.GeometryFactory;
 import GeometryFactory.Polygon;
 
 public class PolygonFeature implements Feature {
+	private String name;
+	private Polygon geometry;
+	private String info;
 
-	@Override
-	public Geometry getGeometry() {
-		// TODO Auto-generated method stub
-		return null;
+	public PolygonFeature(String name, String wkt) throws WktInvalidException {
+		this(name, wkt, "This is a line");
+	}
+
+	public PolygonFeature(String name, String wkt, String info) throws WktInvalidException {
+		geometry = GeometryFactory.createPolygon(wkt);
+		this.name = name;
+		this.info = info;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Polygon getGeometry() {
+		return geometry;
+	}
+
+	public void setGeometry(Polygon geometry) {
+		this.geometry = geometry;
 	}
 
 	@Override
 	public String getInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		return info;
+	}
+
+	@Override
+	public String getWKT() throws WKTRepresentationException {
+		return geometry.getWKT();
 	}
 
 	@Override
 	public Polygon buffer(double range) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getWKT() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
