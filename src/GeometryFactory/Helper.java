@@ -7,7 +7,7 @@ public class Helper {
     /**
      * Checks if wkt conform and returns the wkt type or null if not wkt conform
      * @param dimension - the dimension of the object
-     * @param mValue - the measure value of the object
+     * @param mValue    - the measure value of the object
      * @return {String|null} - the wkt type to return
      */
     public static String getWktType(int dimension, Double mValue) {
@@ -31,8 +31,7 @@ public class Helper {
     }
 
     /**
-     *
-     * @param type - the WKT type of the Geometry ("", "Z", "M" or "ZM")
+     * @param type   - the WKT type of the Geometry ("", "Z", "M" or "ZM")
      * @param length - the number of given values
      * @throws WktInvalidException -
      */
@@ -53,7 +52,6 @@ public class Helper {
     }
 
     /**
-     *
      * @param wkt
      * @param p
      */
@@ -86,7 +84,6 @@ public class Helper {
     }
 
     /**
-     *
      * @param type
      * @param points
      * @param wktType
@@ -129,7 +126,7 @@ public class Helper {
 
     /**
      * Creates a Point Array from a String Array and the WKT type
-     * @param type - WKT type of the geometry
+     * @param type   - WKT type of the geometry
      * @param points - String array containing the point values
      * @throws WktInvalidException
      */

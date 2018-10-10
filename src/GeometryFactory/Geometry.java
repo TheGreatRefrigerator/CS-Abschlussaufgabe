@@ -4,15 +4,16 @@ import Exceptions.WKTRepresentationException;
 
 public interface Geometry {
 
-	String getWKT() throws WKTRepresentationException;
-	boolean isWktConform();
-	// Fläche einer Geometrie
+    String getWKT() throws WKTRepresentationException;
+
+    boolean isWktConform();
+    // Fläche einer Geometrie
 //		public double Area(); 
 
-	// Zentriod
+    // Zentriod
 //		public double Centroid(); 
-		
-	// Ausdehnung 
+
+    // Ausdehnung
 //		public double Extent();	
 
 

@@ -7,7 +7,6 @@ import Exceptions.WktInvalidException;
 public class GeometryFactory {
     /**
      * Creates a Point Geometry from a wktString and checks it for validity
-     *
      * @param wktPoint - the Point WKT String
      * @return {Point} - the created Point
      * @throws WktInvalidException - in case of wrong WKT format
@@ -59,7 +58,6 @@ public class GeometryFactory {
     /**
      * Creates a new Point with exactly the same constructor as in Point.java for
      * arbitrary dimensions
-     *
      * @param coords - the n dimensional coordinates
      * @return {Point} - the created Point
      */
@@ -74,7 +72,6 @@ public class GeometryFactory {
 
     /**
      * Creates a new Point with measure value and arbitrary dimensions
-     *
      * @param m      - the measure value
      * @param coords - the n dimensional coordinates
      * @return {Point} - the created Point
@@ -85,7 +82,6 @@ public class GeometryFactory {
 
     /**
      * Creates a Line Geometry from a wktString and checks it for validity
-     *
      * @param wktLine - the Line WKT String
      * @return {Line} - the created Point
      * @throws WktInvalidException - in case of wrong WKT format
@@ -113,7 +109,6 @@ public class GeometryFactory {
 
     /**
      * Create Line from Coordinates Array
-     *
      * @param coords - Array of Coordinate Arrays ([[x1,y1,..],[x2,y2,..],..)
      * @return {Line} - the created Line
      */
@@ -127,7 +122,6 @@ public class GeometryFactory {
 
     /**
      * Create Line from Points
-     *
      * @param points - Array of Points for the Line
      * @return {Line} - created Line
      */
@@ -138,7 +132,6 @@ public class GeometryFactory {
     /**
      * Create Polygon from Point array
      * First and Last Points need to be the same
-     *
      * @param points - Points array
      * @return {Polygon} - the created Polygon
      */
@@ -151,14 +144,14 @@ public class GeometryFactory {
      * @param wktPolygon - String wkt
      * @return - created Polygon
      */
-	public static Polygon createPolygon(String wktPolygon) throws WktInvalidException {
+    public static Polygon createPolygon(String wktPolygon) throws WktInvalidException {
         // split polygon wkt on '(' and ')' so "POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10))"
         // will be "POLYGON ", "35 10, 45 45, 15 40, 10 20, 35 10"
         String[] wkt = wktPolygon.split("[()]");
 
         // Add check for Polygons with holes as we do not support them
         // POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))
-        if(wkt.length > 3) {
+        if (wkt.length > 3) {
             System.out.println("Currently we do not support polygons with inner rings.");
             throw new WktInvalidException();
         }
@@ -182,11 +175,11 @@ public class GeometryFactory {
      * @param coords - Array of Coordinates for the Polygon
      * @return - created Polygon
      */
-	public static Polygon createPolygon(double[]... coords) throws InvalidPolygonException, DimensionalException {
-		Point[] pointArray = new Point[coords.length];
+    public static Polygon createPolygon(double[]... coords) throws InvalidPolygonException, DimensionalException {
+        Point[] pointArray = new Point[coords.length];
         for (int i = 0; i < coords.length; i++) {
             pointArray[i] = createPoint(coords[i]);
         }
-		return new Polygon(pointArray);
-	}
+        return new Polygon(pointArray);
+    }
 }

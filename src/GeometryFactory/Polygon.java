@@ -59,7 +59,7 @@ public class Polygon implements Geometry {
                 this.points = points;
                 this.wktType = wktType;
             } else {
-               throw new InvalidPolygonException();
+                throw new InvalidPolygonException();
             }
         } else {
             throw new InvalidPolygonException();

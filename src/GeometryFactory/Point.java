@@ -15,7 +15,6 @@ public class Point implements Geometry {
 
     /**
      * Create Point from coordinates with double values
-     *
      * @param coords - the coordinates array
      */
     public Point(double... coords) {
@@ -66,7 +65,6 @@ public class Point implements Geometry {
 
     /**
      * Returns the point coordinates
-     *
      * @return {double[]} the coordinates array
      */
     public double[] getCoordinates() {
@@ -75,7 +73,6 @@ public class Point implements Geometry {
 
     /**
      * Sets the value for a specific coordinate
-     *
      * @param position - the dimensional position (x = 1, y = 2 ...)
      * @param value    - the new value
      */
@@ -99,7 +96,6 @@ public class Point implements Geometry {
 
     /**
      * Set x coordinate of point
-     *
      * @param x - the x value
      */
     public void setX(double x) {
@@ -108,7 +104,6 @@ public class Point implements Geometry {
 
     /**
      * Set y coordinate of point
-     *
      * @param y - the y value
      */
     public void setY(double y) {
@@ -122,9 +117,9 @@ public class Point implements Geometry {
     public boolean hasLrsValue() {
         return !(mValue == null);
     }
+
     /**
      * Returns the measure value of the point
-     *
      * @return the point value
      */
     public double getLrsValue() {
@@ -149,12 +144,12 @@ public class Point implements Geometry {
             if (!wktType.contains("M")) {
                 wktType += 'M';
             }
-        } catch (WktInvalidException ignored) {}
+        } catch (WktInvalidException ignored) {
+        }
     }
 
     /**
      * Returns the point dimension
-     *
      * @return {int} the point dimension
      */
     public int getDimension() {
@@ -180,7 +175,7 @@ public class Point implements Geometry {
     @Override
     public String getWKT() throws WKTRepresentationException {
         if (!(wktType == null)) {
-            return Helper.buildWkt("point", new Point[] {this}, wktType);
+            return Helper.buildWkt("point", new Point[]{this}, wktType);
         } else {
             throw new WKTRepresentationException();
         }
