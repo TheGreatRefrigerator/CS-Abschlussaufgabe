@@ -26,8 +26,7 @@ public class Buffer {
      *
      * @param point      - the point geometry
      * @param range      - the buffer range in point coordinate units
-     * @param smoothness - this defines how many points will be added in an 90 degree angle
-     *                   for 0 the result is a diamond
+     * @param smoothness - defines how many points will be added in an 90 degree angle
      * @return {Polygon} - the buffer geometry
      */
     static Polygon pointBuffer(Point point, double range, int smoothness) {
@@ -242,18 +241,18 @@ public class Buffer {
     }
 
     /**
-     * Orient angle respective to north and show only positive values, range 0-360
+     * Orient standard angle respective to north and show only positive values, range 0-360
      * North = 0, East = 90, South = 180, West = 270
      *
      * @param standardAngle - an angle in standard format
      * @return {double} - normalized angle
      */
-    private static double normalizeAngle(double standardAngle) {
+    public static double normalizeAngle(double standardAngle) {
         return ((standardAngle * (-1) + 450) % 360);
     }
 
     /**
-     * Switch normalized angle back to standard format
+     * Switch normalized angle to standard format
      * North = 90, East = 0, South = - 90, West = 180
      *
      * @param normalAngle - an angle in normalized format

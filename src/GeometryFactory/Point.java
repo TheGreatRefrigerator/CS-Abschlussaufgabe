@@ -2,23 +2,26 @@ package GeometryFactory;
 
 import Exceptions.WKTRepresentationException;
 import Exceptions.WktInvalidException;
+import FeaturePackage.Buffer;
 
 import java.util.Arrays;
 
 public class Point implements Geometry {
+    /*--Attributes--*/
     // Attributes of the Point Geometry
     private double[] coordinates;
     private int d; // dimension
-    private Double mValue; // see https://en.wikipedia.org/wiki/Well-known_text and
-    // https://en.wikipedia.org/wiki/Linear_referencing
+    private Double m;
     private String wktType;
 
+    /*--Constructors--*/
     /**
      * Create Point from coordinates with double values
+     *
      * @param coords - the coordinates array
      */
     public Point(double... coords) {
-        mValue = null;
+        m = null;
         d = 0;
         coordinates = coords;
         for (double i : coords) {
@@ -32,47 +35,35 @@ public class Point implements Geometry {
      * @param lrsValue
      * @param coords
      */
+    // see https://en.wikipedia.org/wiki/Well-known_text and
+    // https://en.wikipedia.org/wiki/Linear_referencing
     public Point(double lrsValue, double... coords) {
-        this.mValue = lrsValue;
+        this.m = lrsValue;
         coordinates = coords;
         d = 0;
         for (double i : coords) {
             d++;
         }
-        wktType = Helper.getWktType(d, mValue);
+        wktType = Helper.getWktType(d, m);
     }
-    // Constructor II with a double array, which contains the coordinates
-//    public Point(double[] coords) { // coords = Array-Name
-//        coordinates = coords;
-//        d = 0;
-//        for (double i : coords) {
-//            d++;
-//        }
-//    }
+
     // TODO: copyconstructor for point with coordinates array
     // Constructor for deep-copy of point  (-> point b)
     // Parameter p: Point that shall be copied
-//	public Point(Point p) {
-//		x = p.x;
-//		y = p.y;
-//	}
-//
-//	public Point() {
-//		x = 0;
-//		y = 0;
-//	}
-    // // Getter/Setter
+    //	public Point(Point p) {
+    //		x = p.x;
+    //		y = p.y;
+    //	}
 
-    /**
-     * Returns the point coordinates
-     * @return {double[]} the coordinates array
-     */
+    /*--Getter & Setter--*/
+
     public double[] getCoordinates() {
         return coordinates;
     }
 
     /**
      * Sets the value for a specific coordinate
+     *
      * @param position - the dimensional position (x = 1, y = 2 ...)
      * @param value    - the new value
      */
@@ -80,78 +71,22 @@ public class Point implements Geometry {
         coordinates[position - 1] = value;
     }
 
-    /**
-     * @return {double} - x coordinate of point
-     */
     public double getX() {
         return coordinates[0];
     }
 
-    /**
-     * @return {double} - y coordinate of point
-     */
-    public double getY() {
-        return coordinates[1];
-    }
-
-    /**
-     * Set x coordinate of point
-     * @param x - the x value
-     */
     public void setX(double x) {
         coordinates[0] = x;
     }
 
-    /**
-     * Set y coordinate of point
-     * @param y - the y value
-     */
+    public double getY() {
+        return coordinates[1];
+    }
+
     public void setY(double y) {
         coordinates[1] = y;
     }
 
-    /**
-     * Return true if the point has a M value and false if it is not defined
-     * @return
-     */
-    public boolean hasLrsValue() {
-        return !(mValue == null);
-    }
-
-    /**
-     * Returns the measure value of the point
-     * @return the point value
-     */
-    public double getLrsValue() {
-        double d = 0;
-
-        try {
-            d = mValue;
-        } catch (NullPointerException e) {
-//            d = null
-        }
-        return d;
-    }
-
-    /**
-     * Sets the measure Value of the point
-     * @param mValue
-     */
-    public void setLrsValue(Double mValue) {
-        this.mValue = mValue;
-        try {
-            Helper.checkWktValidity(wktType, d);
-            if (!wktType.contains("M")) {
-                wktType += 'M';
-            }
-        } catch (WktInvalidException ignored) {
-        }
-    }
-
-    /**
-     * Returns the point dimension
-     * @return {int} the point dimension
-     */
     public int getDimension() {
         return d;
     }
@@ -160,12 +95,51 @@ public class Point implements Geometry {
         return wktType;
     }
 
+    /**
+     * Returns the measure value of the point
+     *
+     * @return the point value
+     */
+    public double getLrsValue() {
+        double d = 0;
+        try {
+            d = m;
+        } catch (NullPointerException e) {
+            System.out.println("Check if the point has a Value with Point.hasLrsValue() before getting it.");
+        }
+        return d;
+    }
 
-    // METHODS
+    /**
+     * Sets the measure Value of the point
+     *
+     * @param lrsValue
+     */
+    public void setLrsValue(Double lrsValue) {
+        this.m = lrsValue;
+        try {
+            Helper.checkWktValidity(wktType, d);
+            if (!wktType.contains("M")) {
+                wktType += 'M';
+            }
+        } catch (WktInvalidException ignored) {
+            // if this is no valid WKT point it doesn't matter
+            // it can still have a value
+        }
+    }
+
+    /*--Methods--*/
+
+    /**
+     * Return true if the point has a M value and false if it is not defined
+     */
+    public boolean hasLrsValue() {
+        return !(m == null);
+    }
+
 
     /**
      * Checks if the current Geometry is Wkt Conform
-     * @return
      */
     @Override
     public boolean isWktConform() {
@@ -182,39 +156,37 @@ public class Point implements Geometry {
     }
 
     /**
-     * Checks if the Points are the same by comparing all the attributes.
-     * Returns true only if all the attributes are the same
+     * Compares this point with another point for equality.
+     * Returns true if all the attributes are the same
+     *
      * @param p - Point to compare
      * @return {boolean} - true for same Point
      */
     public boolean is(Point p) {
-        boolean sameCoords = Arrays.equals(coordinates, p.getCoordinates());
+        boolean sameCoordinates = Arrays.equals(coordinates, p.getCoordinates());
         boolean sameDimension = d == p.getDimension();
         boolean sameWktType = p.isWktConform() ? wktType.equals(p.getWktType()) : wktType == null;
-        boolean isSame = sameCoords && sameWktType && sameDimension;
-        if (!(mValue == null)) {
-            isSame = isSame && (mValue == p.getLrsValue());
+        boolean isSame = sameCoordinates && sameWktType && sameDimension;
+        if (!(m == null)) {
+            isSame = isSame && (m == p.getLrsValue());
         }
         return isSame;
     }
-//    private double[] coordinates;
-//    private int d; // dimension
-//    private Double mValue; // see https://en.wikipedia.org/wiki/Well-known_text and
-//    // https://en.wikipedia.org/wiki/Linear_referencing
-//    private String wktType;
-//	// Distance from this point to another
-//	// Parameter b: other Point
-//	// return: distance
-//	public double distanceTo(Point b) {
-//		double a_quadrat = Math.pow(b.getX() - getX(), 2); // wuuuhu!
-//		double b_quadrat = Math.pow(b.getY() - getY(), 2);
-//		double dist = Math.sqrt(a_quadrat + b_quadrat);
-//		return dist;
-//	}
-//
 
     /**
-     *
+     * Distance from this point to another
+     * @param p - other point
+     * @return - distance in coordinate units
+     */
+    public double distanceTo(Point p) {
+		double xSquare = Math.pow(p.getX() - getX(), 2);
+		double ySquare = Math.pow(p.getY() - getY(), 2);
+        return Math.sqrt(xSquare + ySquare);
+	}
+
+    /**
+     * Calculates the angle from this point to another as
+     * east aligned angle with values between +pi and -pi
      * @param p
      * @return
      */
@@ -225,26 +197,14 @@ public class Point implements Geometry {
         return (rad * 180 / Math.PI);
     }
 
-
-    // Area`
-//	public double Area() {
-//		return 0;
-//	}
-
-    // Expansion
-//	public double Extent() {
-//		return 0;
-//	}
-
-    // Centroid
-    // public double Centroid() {
-    // ? return this; }
-
-//	// Method for comparing objects -> here Point with reference point b
-//	public boolean equals(Object o) {
-//		Point b = (Point) o;
-//		return ((this.getX() == b.getX())) && ((this.getY() == b.getX()));
-//
-//	}
+    /**
+     * Calculates bearing from this point to another as
+     * north aligned angle with values between 0 and 360
+     * @param p
+     * @return
+     */
+    public double nAngle(Point p) {
+        return Buffer.normalizeAngle(this.angle(p));
+    }
 
 }
