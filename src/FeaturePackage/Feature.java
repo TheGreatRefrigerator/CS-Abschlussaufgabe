@@ -19,7 +19,7 @@ public interface Feature {
 
     void setInfo(String info);
 
-    Polygon buffer(double range);
+    Polygon buffer(double distance);
 
     String getWKT() throws WKTRepresentationException;
 }
