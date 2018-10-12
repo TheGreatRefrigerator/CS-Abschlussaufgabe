@@ -212,15 +212,19 @@ public class Point implements Geometry {
 //		return dist;
 //	}
 //
-//	// Angle between this point and another
-//	// Parameter b: other point
-//	// return: angle in degree
-//	public double getAngle(Point p) {
-//		double angle = Math.toDegrees(Math.atan2(p.y - this.getY(), p.x - this.getX()));
-//		if (angle < 0)
-//			angle += 360;
-//		return angle;
-//	}
+
+    /**
+     *
+     * @param p
+     * @return
+     */
+    public double angle(Point p) {
+        double ox = p.getX() - this.getX();
+        double oy = p.getY() - this.getY();
+        double rad = Math.atan2(oy, ox);
+        return (rad * 180 / Math.PI);
+    }
+
 
     // Area`
 //	public double Area() {
