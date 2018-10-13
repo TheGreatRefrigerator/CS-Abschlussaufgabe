@@ -23,6 +23,16 @@ public class PointFeature implements Feature {
         this.info = info;
     }
 
+    public PointFeature(String name, Point p) {
+        this(name, infoText, p);
+    }
+
+    public PointFeature(String name, String info, Point p) {
+        geometry = p;
+        this.name = name;
+        this.info = info;
+    }
+
     public PointFeature(String name, double... coords) {
         this(name, infoText, coords);
     }
