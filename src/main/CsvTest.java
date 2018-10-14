@@ -12,8 +12,8 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class CsvTest {
-    public static void csvTest() {
+class CsvTest {
+    static void csvTest() {
         System.out.println();
         System.out.println("---Test CSV---");
         String workingDir = System.getProperty("user.dir");

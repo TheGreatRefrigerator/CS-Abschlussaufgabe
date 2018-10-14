@@ -11,8 +11,8 @@ import GeometryFactory.GeometryFactory;
 import GeometryFactory.Point;
 import GeometryFactory.Polygon;
 
-public class FeatureTest {
-    public static void featureTest() {
+class FeatureTest {
+    static void featureTest() {
         System.out.println();
         System.out.println("---Test FeaturePackage---");
         System.out.println("PointFeature Tests:");
@@ -38,16 +38,14 @@ public class FeatureTest {
             PolygonFeature bla = new PolygonFeature("poly", "POLYGON((12.4198272238973 27.24523957615215,22.0877959738973 29.48779401608338,26.5702178488973 37.466475220360145,11.8045928488973 36.83600768359284,4.8612334738973 29.027725613384003,12.4198272238973 27.24523957615215))");
             PolygonFeature fromPoints = new PolygonFeature("poly", "This is a polygon created from multiple point geometries", x1, x2, x3, x1);
 
-            LineFeature yen = new LineFeature("line", "LINESTRING (1 1,2 2)");
-            LineFeature lin = new LineFeature("line", "LINESTRING (5 5,10 10)");
+//            LineFeature yen = new LineFeature("line", "LINESTRING (1 1,2 2)");
+//            LineFeature lin = new LineFeature("line", "LINESTRING (5 5,10 10)");
             Polygon buff = square.buffer(2, 0);
-            buff = bla.buffer(0.005, 6);
-            Polygon buff2 = yen.buffer(2, 0);
-            System.out.println(buff.getWKT());
-            System.out.println(buff2.getWKT());
+//            Polygon buff2 = yen.buffer(2, 0);
+            System.out.println(bla.getWKT());
             System.out.println(yan.buffer(2, 1).getWKT());
             System.out.println(buff.getWKT());
-            Point[] points = lin.buffer(2, 1).getPoints();
+//            Point[] points = lin.buffer(2, 1).getPoints();
 
         } catch (WktInvalidException | WKTRepresentationException | DimensionalException | InvalidPolygonException e) {
             e.printStackTrace();

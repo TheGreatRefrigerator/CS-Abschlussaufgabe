@@ -182,12 +182,16 @@ public class Buffer {
         return sum > sum2 ? points : reverse(points);
     }
 
+    /**
+     * Process the line segments of a line geometry
+     * @return {ArrayList<Point>} - the array list of all buffer points
+     */
     private static ArrayList<Point> processLineSegments() {
         return processLineSegments(false);
     }
 
     /**
-     * Process the
+     * Process the line segments of a line or polygon geometry
      * @param polygon - if this is called for a polygon
      * @return {ArrayList<Point>} - the array list of all buffer points
      */
@@ -226,7 +230,7 @@ public class Buffer {
         Point current = points[index];
         Point next = points[index + 1];
         // calculate the angle of the current segment 0 0 to 1 1 would be 45 degrees
-        double nSegment = current.nAngle(next);
+        double nSegment = normalizeAngle(current.angle(next));
         // angle from the current point to the buffer point to add
         double nBufferInit = (nSegment + 270) % 360;
 

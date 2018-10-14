@@ -5,8 +5,8 @@ import Exceptions.WktInvalidException;
 import GeometryFactory.GeometryFactory;
 import GeometryFactory.Point;
 
-public class PointTest {
-    public static void pointTest() {
+class PointTest {
+    static void pointTest() {
         System.out.println("---Point Test---");
         Point p = GeometryFactory.createPoint(23.4, 123.2, 3, 42, 1, 54, 3);
         Point m = GeometryFactory.createPointM(2, 1232, 33);
