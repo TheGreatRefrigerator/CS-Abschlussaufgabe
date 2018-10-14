@@ -15,9 +15,9 @@ public class Point implements Geometry {
     private String wktType;
 
     /*--Constructors--*/
+
     /**
      * Create Point from coordinates with double values
-     *
      * @param coords - the coordinates array
      */
     public Point(double... coords) {
@@ -63,7 +63,6 @@ public class Point implements Geometry {
 
     /**
      * Sets the value for a specific coordinate
-     *
      * @param position - the dimensional position (x = 1, y = 2 ...)
      * @param value    - the new value
      */
@@ -97,7 +96,6 @@ public class Point implements Geometry {
 
     /**
      * Returns the measure value of the point
-     *
      * @return the point value
      */
     public double getLrsValue() {
@@ -112,7 +110,6 @@ public class Point implements Geometry {
 
     /**
      * Sets the measure Value of the point
-     *
      * @param lrsValue
      */
     public void setLrsValue(Double lrsValue) {
@@ -158,7 +155,6 @@ public class Point implements Geometry {
     /**
      * Compares this point with another point for equality.
      * Returns true if all the attributes are the same
-     *
      * @param p - Point to compare
      * @return {boolean} - true for same Point
      */
@@ -179,16 +175,16 @@ public class Point implements Geometry {
      * @return - distance in coordinate units
      */
     public double distanceTo(Point p) {
-		double xSquare = Math.pow(p.getX() - getX(), 2);
-		double ySquare = Math.pow(p.getY() - getY(), 2);
+        double xSquare = Math.pow(p.getX() - getX(), 2);
+        double ySquare = Math.pow(p.getY() - getY(), 2);
         return Math.sqrt(xSquare + ySquare);
-	}
+    }
 
     /**
      * Calculates the angle from this point to another as
      * east aligned angle with values between +pi and -pi
-     * @param p
-     * @return
+     * @param p - other point
+     * @return - the angle
      */
     public double angle(Point p) {
         double ox = p.getX() - this.getX();
@@ -200,8 +196,8 @@ public class Point implements Geometry {
     /**
      * Calculates bearing from this point to another as
      * north aligned angle with values between 0 and 360
-     * @param p
-     * @return
+     * @param p - other point
+     * @return - the normalized angle
      */
     public double nAngle(Point p) {
         return Buffer.normalizeAngle(this.angle(p));

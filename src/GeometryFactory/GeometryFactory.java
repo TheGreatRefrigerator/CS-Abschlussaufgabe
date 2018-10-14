@@ -7,6 +7,8 @@ import Exceptions.WktInvalidException;
 import static FeaturePackage.Buffer.standardizeAngle;
 
 public class GeometryFactory {
+    /*--Methods--*/
+
     /**
      * Creates a Point Geometry from a wktString and checks it for validity
      * @param wktPoint - the Point WKT String
@@ -84,17 +86,15 @@ public class GeometryFactory {
 
     /**
      * Create a new Point derived from another Point and the direction as angle from north (0)
-     * @param p - base point
-     * @param nAngle - normalized angle (0 - 360) from north
+     * @param p        - base point
+     * @param nAngle   - normalized angle (0 - 360) from north
      * @param distance - distance to base point
      * @return {Point} - the created Point
      */
     public static Point createPoint(Point p, double nAngle, double distance) {
-        // is same as double newX = x + range * Math.cos(Math.toRadians(standardizeAngle(nInit)));
-
-        double x = p.getX() + distance * Math.cos(Math.PI * standardizeAngle(nAngle) / 180);
-        double y = p.getY() + distance * Math.sin(Math.PI * standardizeAngle(nAngle) / 180);
-        return new Point(new double[] {x,y});
+        double x = p.getX() + distance * Math.cos(Math.toRadians(nAngle));
+        double y = p.getY() + distance * Math.sin(Math.toRadians(nAngle));
+        return new Point(new double[]{x, y});
     }
 
     /**

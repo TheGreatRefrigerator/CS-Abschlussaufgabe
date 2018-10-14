@@ -5,10 +5,13 @@ import Exceptions.InvalidPolygonException;
 import Exceptions.WKTRepresentationException;
 
 public class Polygon implements Geometry {
+    /*--Attributes--*/
     // Attributes of the Polygon Geometry
     private Point[] points;
     private int d;
     private String wktType;
+
+    /*--Constructors--*/
 
     /**
      * Creates Polygon from List of Points
@@ -66,6 +69,7 @@ public class Polygon implements Geometry {
         }
     }
 
+    /*--Getter & Setter--*/
     public String getWktType() {
         return wktType;
     }
@@ -78,6 +82,12 @@ public class Polygon implements Geometry {
     public Point[] getPoints() {
         return points;
     }
+
+    public void setPoints(Point[] points) {
+        this.points = points;
+    }
+
+    /*--Methods--*/
 
     /**
      * Returns a Point at a specific position in the Line
@@ -97,7 +107,6 @@ public class Polygon implements Geometry {
         points[number - 1] = point;
     }
 
-    // WKT
     @Override
     public String getWKT() throws WKTRepresentationException {
         return Helper.buildWkt("polygon", points, wktType);

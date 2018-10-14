@@ -109,8 +109,8 @@ public class Buffer {
 
     /**
      * Generates a Buffer around a line geometry
-     * @param polygon    - the polygon geometry
-     * @param distance      - the buffer range in polygon coordinate units
+     * @param polygon  - the polygon geometry
+     * @param distance - the buffer range in polygon coordinate units
      * @param accuracy - this defines how many points will be added in an 90 degree angle
      * @return {Polygon} - the buffer geometry
      */
@@ -217,16 +217,16 @@ public class Buffer {
 
     /**
      * Processes one geometry line segment for buffer point creation
-     * @param index - current index of the geometry points array
+     * @param index           - current index of the geometry points array
      * @param bufferPointList - the buffer point array to append to
-     * @param polygon - if this is called for a polygon
+     * @param polygon         - if this is called for a polygon
      */
-    private static void processLineSegment(int index, ArrayList<Point> bufferPointList,boolean polygon) {
+    private static void processLineSegment(int index, ArrayList<Point> bufferPointList, boolean polygon) {
         // get the current segments start and endpoint
         Point current = points[index];
         Point next = points[index + 1];
         // calculate the angle of the current segment 0 0 to 1 1 would be 45 degrees
-        double nSegment = normalizeAngle(current.angle(next));
+        double nSegment = current.nAngle(next);
         // angle from the current point to the buffer point to add
         double nBufferInit = (nSegment + 270) % 360;
 
@@ -247,10 +247,10 @@ public class Buffer {
 
     /**
      * Processes the Angle between two geometry line segments
-     * @param nSegment - angle in degrees from north of the first segment
-     * @param index - current index of the geometry points array
+     * @param nSegment        - angle in degrees from north of the first segment
+     * @param index           - current index of the geometry points array
      * @param bufferPointList - the buffer point array to append to
-     * @param polygon - if this is called for a polygon
+     * @param polygon         - if this is called for a polygon
      */
     private static void processAngle(double nSegment, int index, ArrayList<Point> bufferPointList, boolean polygon) {
         // calculate the angle between this and the next line segment
@@ -272,11 +272,11 @@ public class Buffer {
 
     /**
      * Processes left turns in line and polygon geometries
-     * @param nSegment - the angle in degrees from north of the segment before the turn
-     * @param nCurveAngle - the angle of the turn in degree
+     * @param nSegment        - the angle in degrees from north of the segment before the turn
+     * @param nCurveAngle     - the angle of the turn in degree
      * @param bufferPointList - the buffer point array to append to
-     * @param index - the current index in the points array
-     * @param polygon - if this is called for a polygon
+     * @param index           - the current index in the points array
+     * @param polygon         - if this is called for a polygon
      */
     private static void leftTurn(double nSegment, double nCurveAngle, ArrayList<Point> bufferPointList, int index, boolean polygon) {
         // angle from the current point to the buffer point to add
@@ -320,9 +320,9 @@ public class Buffer {
 
     /**
      * Processes right turns in line and polygon geometries
-     * @param next - the turn point
-     * @param nBufferInit - angle from the turn point to the first buffer point of the curve
-     * @param nCurveAngle - the angle of the turn in degrees
+     * @param next            - the turn point
+     * @param nBufferInit     - angle from the turn point to the first buffer point of the curve
+     * @param nCurveAngle     - the angle of the turn in degrees
      * @param bufferPointList - the buffer point array to append to
      */
     private static void rightTurn(Point next, double nBufferInit, double nCurveAngle, ArrayList<Point> bufferPointList) {
@@ -349,9 +349,9 @@ public class Buffer {
 
     /**
      * Creates curve points and appends them to the buffer point list
-     * @param p - the point of the geometry the curve is created from
-     * @param initAngle - the angle from north from p to the first curve point
-     * @param nCurveAngle - the angle of the turn in degrees
+     * @param p               - the point of the geometry the curve is created from
+     * @param initAngle       - the angle from north from p to the first curve point
+     * @param nCurveAngle     - the angle of the turn in degrees
      * @param bufferPointList - the buffer point array to append to
      */
     private static void createCurvePoints(Point p, double initAngle, double nCurveAngle, ArrayList<Point> bufferPointList) {
@@ -389,7 +389,7 @@ public class Buffer {
     /**
      * Returns the clockwise turn angle between the current and next geometry line segment
      * @param points - the geometry points array
-     * @param index - the current index
+     * @param index  - the current index
      * @return {double} - the turn angle in degrees
      */
     private static double getCurveAngle(Point[] points, int index) {
@@ -407,8 +407,8 @@ public class Buffer {
 
     /**
      * Returns the clockwise turn angle between three points
-     * @param one - first point
-     * @param two - second point
+     * @param one   - first point
+     * @param two   - second point
      * @param three - third point
      * @return {double} - the turn angle in degrees
      */
@@ -436,7 +436,7 @@ public class Buffer {
      * accuracy = 0 -> value = 8.2
      * accuracy = 4 -> value = 8.23623
      * this is important for latitude/longitude values
-     * @param list - the full buffer point array to process
+     * @param list     - the full buffer point array to process
      * @param accuracy - places to leave after range precision
      */
     private static void trimCoords(Point[] list, int accuracy) {

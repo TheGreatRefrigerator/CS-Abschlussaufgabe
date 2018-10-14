@@ -13,14 +13,13 @@ public class PolygonFeature implements Feature {
     private String name;
     private Polygon geometry;
     private String info;
-    /*--Constant--*/
     // Default info text
     private static final String infoText = "This is a Polygon";
 
     /*--Constructors--*/
+
     /**
      * Construct polygon feature from WKT with default info
-     *
      * @param name - the feature name
      * @param wkt  - the WKT string
      * @throws WktInvalidException - in case of invalid WKT
@@ -31,7 +30,6 @@ public class PolygonFeature implements Feature {
 
     /**
      * Construct polygon feature from WKT
-     *
      * @param name - the feature name
      * @param info - the info text
      * @param wkt  - the WKT string
@@ -45,7 +43,6 @@ public class PolygonFeature implements Feature {
 
     /**
      * Create polygon feature from double arrays with default info
-     *
      * @param name   - the feature name
      * @param coords - the coordinates [x1,y1],[x2,y2],..,[x1,y1]
      * @throws DimensionalException    - for combining coordinates of different dimension
@@ -57,7 +54,6 @@ public class PolygonFeature implements Feature {
 
     /**
      * Create polygon feature from double arrays with default info
-     *
      * @param name   - the feature name
      * @param coords - the coordinates [x1,y1],[x2,y2],..,[x1,y1]
      * @param info   - the info text
@@ -72,7 +68,6 @@ public class PolygonFeature implements Feature {
 
     /**
      * Create polygon feature from multiple point geometries.
-     *
      * @param name   - the feature name
      * @param points - the points e.g. p1, p2, p3, ..., p1
      * @throws DimensionalException    - for points of different dimension
@@ -84,7 +79,6 @@ public class PolygonFeature implements Feature {
 
     /**
      * Create polygon feature from multiple point geometries.
-     *
      * @param name   - the feature name
      * @param info   - the info text
      * @param points - the points e.g. p1, p2, p3, ..., p1
@@ -132,10 +126,10 @@ public class PolygonFeature implements Feature {
     }
 
     /*--Methods--*/
+
     /**
      * Generates a Buffer around the Polygon with specified distance
      * and a smoothness of 2
-     *
      * @param distance - the buffer distance
      * @return {Polygon} - the buffer polygon
      */
@@ -146,7 +140,6 @@ public class PolygonFeature implements Feature {
     /**
      * Generates a Buffer around the Polygon with specified distance.
      * The corner smoothness can be adjusted for less edgy geometries
-     *
      * @param distance   - the buffer distance
      * @param smoothness - corner smoothness; default: 2
      * @return {Polygon} - the buffer polygon
@@ -158,7 +151,6 @@ public class PolygonFeature implements Feature {
     /**
      * Generates a Buffer around or inside the Polygon with specified distance
      * and a smoothness of 2
-     *
      * @param distance - the buffer distance
      * @param inside   - create buffer inside the polygon
      * @return {Polygon} - the buffer polygon
@@ -170,7 +162,6 @@ public class PolygonFeature implements Feature {
     /**
      * Generates a Buffer around or inside the Polygon with specified distance.
      * The corner smoothness can be adjusted for less edgy geometries
-     *
      * @param distance   - the buffer distance
      * @param smoothness - corner smoothness; default: 2
      * @param inside     - create buffer inside the polygon

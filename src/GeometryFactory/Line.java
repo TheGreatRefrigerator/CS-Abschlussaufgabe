@@ -4,10 +4,13 @@ import Exceptions.DimensionalException;
 import Exceptions.WKTRepresentationException;
 
 public class Line implements Geometry {
+    /*--Attributes--*/
     // Attributes of the Line Object
     private Point[] points;
     private int d;
     private String wktType;
+
+    /*--Constructors--*/
 
     /**
      * Constructor will take any amount of Points because of the ...(spread)
@@ -57,6 +60,8 @@ public class Line implements Geometry {
         this.wktType = wktType;
     }
 
+    /*--Getter & Setter--*/
+
     public String getWktType() {
         return wktType;
     }
@@ -64,6 +69,28 @@ public class Line implements Geometry {
     public void setWktType(String wktType) {
         this.wktType = wktType;
     }
+
+    /**
+     * Returns the Dimension of the Line
+     * @return {int} - the dimension
+     */
+    public int getDimension() {
+        return d;
+    }
+
+    public void setDimension(int dimension) {
+        d = dimension;
+    }
+
+    public Point[] getPoints() {
+        return points;
+    }
+
+    public void setPoints(Point[] points) {
+        this.points = points;
+    }
+
+    /*--Methods--*/
 
     /**
      * Checks if the current Geometry is Wkt Conform
@@ -75,26 +102,20 @@ public class Line implements Geometry {
     }
 
     /**
-     * Returns the Dimension of the Line
-     * @return {int} - the dimension
-     */
-    public int getDimension() {
-        return d;
-    }
-
-    public Point[] getPoints() {
-        return points;
-    }
-
-    // METHODS
-
-    /**
      * Returns the starting point of a line, NO double coords!
      * The point itself has a method to show the coordinates
      * @return the starting point
      */
     public Point getStart() {
         return points[0];
+    }
+
+    /**
+     * Set a new starting point for the line
+     * @param start - the new starting point
+     */
+    public void setStart(Point start) {
+        points[0] = start;
     }
 
     /**
@@ -113,19 +134,11 @@ public class Line implements Geometry {
     public Point getPoint(int position) {
         return points[position - 1];
     }
-
     // Returns WKT representation of the Linestring
+
     @Override
     public String getWKT() throws WKTRepresentationException {
         return Helper.buildWkt("linestring", points, wktType);
-    }
-
-    /**
-     * Set a new starting point for the line
-     * @param start - the new starting point
-     */
-    public void setStart(Point start) {
-        points[0] = start;
     }
 
     /**

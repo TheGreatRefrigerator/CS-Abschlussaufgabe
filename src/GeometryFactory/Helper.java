@@ -52,8 +52,9 @@ public class Helper {
     }
 
     /**
-     * @param wkt
-     * @param p
+     * Builds wkt string part of a point object
+     * @param wkt - Stringbuilder to edit
+     * @param p   - Point object to convert to wkt string
      */
     static void buildPointWktPart(StringBuilder wkt, Point p) {
         double[] pointCoordinates = p.getCoordinates();
@@ -84,10 +85,11 @@ public class Helper {
     }
 
     /**
-     * @param type
-     * @param points
-     * @param wktType
-     * @return
+     * Builds the Wkt-String
+     * @param type    - object type e.g "polygon"
+     * @param points  - geometry points array
+     * @param wktType - wktType e.g. "Z"
+     * @return - Wkt-String
      * @throws WKTRepresentationException
      */
     static String buildWkt(String type, Point[] points, String wktType) throws WKTRepresentationException {

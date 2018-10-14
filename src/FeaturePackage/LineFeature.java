@@ -9,12 +9,21 @@ import GeometryFactory.Point;
 import GeometryFactory.Polygon;
 
 public class LineFeature implements Feature {
+    /*--Attributes--*/
     private String name;
     private Line geometry;
     private String info;
     // Default info text
     private static final String infoText = "This is a line";
 
+    /*--Constructors--*/
+
+    /**
+     * Construct polygon feature from WKT with default info
+     * @param name - the feature name
+     * @param wkt  - the WKT string
+     * @throws WktInvalidException - in case of invalid WKT
+     */
     public LineFeature(String name, String wkt) throws WktInvalidException {
         this(name, infoText, wkt);
     }
@@ -45,6 +54,7 @@ public class LineFeature implements Feature {
         this.info = info;
     }
 
+    /*--Getter & Setter--*/
     @Override
     public String getName() {
         return name;
@@ -72,6 +82,8 @@ public class LineFeature implements Feature {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    /*--Methods--*/
 
     @Override
     public String getWKT() throws WKTRepresentationException {

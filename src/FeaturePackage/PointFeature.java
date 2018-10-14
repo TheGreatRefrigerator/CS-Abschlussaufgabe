@@ -7,12 +7,21 @@ import GeometryFactory.Point;
 import GeometryFactory.Polygon;
 
 public class PointFeature implements Feature {
+    /*--Attributes--*/
     private String name;
     private Point geometry;
     private String info;
     // Default info text
     private static final String infoText = "This is a point";
 
+    /*--Constructors--*/
+
+    /**
+     * Construct point feature from WKT with default info
+     * @param name - the feature name
+     * @param wkt  - the WKT string
+     * @throws WktInvalidException - in case of invalid WKT
+     */
     public PointFeature(String name, String wkt) throws WktInvalidException {
         this(name, infoText, wkt);
     }
@@ -43,7 +52,7 @@ public class PointFeature implements Feature {
         this.info = info;
     }
 
-    // Getter & Setter
+    /*--Getter & Setter--*/
     public String getName() {
         return name;
     }
@@ -69,6 +78,8 @@ public class PointFeature implements Feature {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    /*--Methods--*/
 
     @Override
     public String getWKT() throws WKTRepresentationException {
