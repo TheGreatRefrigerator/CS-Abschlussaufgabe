@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 class CsvTest {
     static void csvTest() {
         System.out.println();
-        System.out.println("---Test CSV---");
         String workingDir = System.getProperty("user.dir");
         System.out.println("Current working directory : " + workingDir);
         try {
@@ -30,10 +29,12 @@ class CsvTest {
 
             // create stream reader and writer
             BufferedReader csvReader= new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            System.out.println("Read File: " + workingDir + "\\cities.csv");
             CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader("X", "Y", "population", "name").parse(csvReader);
             OutputStreamWriter csvWriter = new OutputStreamWriter(csvStream, StandardCharsets.UTF_8);
 
             // use CSV printer for output file writing
+            System.out.println("Add WKT column and generate WKT for each city point");
             CSVPrinter csvPrinter = new CSVPrinter(csvWriter, CSVFormat.DEFAULT.withHeader("X", "Y", "population", "name", "WKT"));
 
             // read Header line without parsing it
@@ -60,7 +61,7 @@ class CsvTest {
                         pf.getWKT()
                 );
             }
-
+            System.out.println("Save to new file: " + workingDir + "\\wkt_cities.csv" );
             // write possibly cached content
             csvPrinter.flush();
 

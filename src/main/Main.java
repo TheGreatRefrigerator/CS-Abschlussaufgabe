@@ -16,10 +16,9 @@ public class Main {
         lineTest();
         polygonTest();
 
-        System.out.println("###Test GeometryFactory###");
         System.out.println("###Test FeaturePackage###");
         featureTest();
-
+        System.out.println("###Test CSV###");
         csvTest();
 
         System.out.println();
