@@ -3,6 +3,7 @@ package GeometryFactory;
 import Exceptions.DimensionalException;
 import Exceptions.InvalidPolygonException;
 import Exceptions.WktInvalidException;
+import FeaturePackage.Buffer;
 
 import static FeaturePackage.Buffer.standardizeAngle;
 
@@ -92,8 +93,8 @@ public class GeometryFactory {
      * @return {Point} - the created Point
      */
     public static Point createPoint(Point p, double nAngle, double distance) {
-        double x = p.getX() + distance * Math.cos(Math.toRadians(nAngle));
-        double y = p.getY() + distance * Math.sin(Math.toRadians(nAngle));
+        double x = p.getX() + distance * Math.cos(Math.toRadians(Buffer.standardizeAngle(nAngle)));
+        double y = p.getY() + distance * Math.sin(Math.toRadians(Buffer.standardizeAngle(nAngle)));
         return new Point(new double[]{x, y});
     }
 

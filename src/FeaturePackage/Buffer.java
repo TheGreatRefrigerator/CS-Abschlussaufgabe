@@ -80,6 +80,8 @@ public class Buffer {
         // set attributes
         range = distance;
         smoothness = accuracy;
+        addInitPoint = true;
+        bufferWasTrimmed = false;
         // store Line points in Point Array
         points = line.getPoints();
         // use ArrayList instead of Array for buffer Points because it has dynamic size
@@ -88,7 +90,7 @@ public class Buffer {
         ArrayList<Point> bufferPointList = processLineSegments();
         // create second half of the buffer Polygon by processing LineSegments
         // from the other direction by reversing the points array
-        points = reverse(points);
+        reversePoints();
         bufferPointList.addAll(processLineSegments());
         // create the last point from the first point to close polygon
         bufferPointList.add(bufferPointList.get(0));
@@ -118,11 +120,12 @@ public class Buffer {
         // set attributes
         range = distance;
         smoothness = accuracy;
+        points = polygon.getPoints();
         // store Polygon points in Point Array in clockwise direction
-        points = clockwiseGeomPoints(polygon);
+        clockwiseGeomPoints();
 
         // reverse points if the buffer should be on the inside of the polygon
-        if (inside) points = reverse(points);
+        if (inside) reversePoints();
 
         // use ArrayList instead of Array because it has dynamic size
         // process all LineSegments with polygon: true
@@ -166,20 +169,20 @@ public class Buffer {
     }
 
     /**
-     * Checks a Polygon geometry and outputs its points in clockwise direction
-     * @param poly - Polygon to check
-     * @return {Point[]} - Polygon points array
+     * Checks points of Polygon geometry and saves its points in clockwise direction
      */
-    private static Point[] clockwiseGeomPoints(Polygon poly) {
-        points = poly.getPoints();
+    private static void clockwiseGeomPoints() {
         // calculate sum of angles to determine the direction
         double sum = 0;
         double sum2 = 0;
         for (int p = 0; p < points.length - 3; p++) {
             sum += getCurveAngle(points, p);
-            sum2 += getCurveAngle(reverse(points), p);
         }
-        return sum > sum2 ? points : reverse(points);
+        reversePoints();
+        for (int q = 0; q < points.length - 3; q++) {
+            sum2 += getCurveAngle(points, q);
+        }
+        if (sum > sum2) reversePoints();
     }
 
     /**
@@ -270,7 +273,7 @@ public class Buffer {
         }
         // when the line makes a left turn (<180)
         else {
-            leftTurn(nSegment, nCurveAngle, bufferPointList, index, polygon);
+            leftTurn(next, nSegment, nCurveAngle, bufferPointList, index, polygon);
         }
     }
 
@@ -282,14 +285,13 @@ public class Buffer {
      * @param index           - the current index in the points array
      * @param polygon         - if this is called for a polygon
      */
-    private static void leftTurn(double nSegment, double nCurveAngle, ArrayList<Point> bufferPointList, int index, boolean polygon) {
+    private static void leftTurn(Point next, double nSegment, double nCurveAngle, ArrayList<Point> bufferPointList, int index, boolean polygon) {
         // angle from the current point to the buffer point to add
         double nBufferInit = (nSegment + 270) % 360;
-        Point turnPoint = points[index + 1];
         // create support Point for calculations like the initPoint
         // if segment goes from 0 0 to 5 0, the support point will be at 5 r
         // where r is the specified buffer distance
-        Point supportPoint = GeometryFactory.createPoint(turnPoint, nBufferInit, range);
+        Point supportPoint = GeometryFactory.createPoint(next, nBufferInit, range);
         double angleFromSupport = (nSegment + 180) % 360;
         // Calculate the distance supportPoint -> intersectionPoint
         // using the range (endpoint -> supportPoint) and the angle at the intersectionPoint
@@ -306,7 +308,7 @@ public class Buffer {
         // calculate angle of line point -> new intersection point and line point -> old buffer point
         // if the angle is greater than 180 it would intersect with the current buffer points
         // so points have to be removed from the buffer point list until there will be no intersection
-        while (getCurveAngle(bufferPointList.get(bufferPointList.size() - 1), turnPoint, intersectionPoint) > 180) {
+        while (bufferPointList.size() > 0 && getCurveAngle(bufferPointList.get(bufferPointList.size() - 1), next, intersectionPoint) > 180) {
             bufferPointList.remove(bufferPointList.size() - 1);
             bufferWasTrimmed = true;
         }
@@ -333,12 +335,18 @@ public class Buffer {
         // if the buffer was trimmed, the curve has to start from the last buffer point
         if (bufferWasTrimmed) {
             // get the angle to the last buffer point
-            double nNewInit = normalizeAngle(next.angle(bufferPointList.get(bufferPointList.size() - 1)));
+            double nNewInit = bufferPointList.size() > 0 ?
+                    normalizeAngle(next.angle(bufferPointList.get(bufferPointList.size() - 1))) :
+                    nBufferInit;
             // create the first point of the curve with direction to the last buffer point
             Point newFirstPoint = GeometryFactory.createPoint(next, nNewInit, range);
             bufferPointList.add(newFirstPoint);
             // adjust the curve angle by the difference of the normal to the new first curve point
-            double nNewCurveAngle = nCurveAngle - getCurveAngle(nNewInit, nBufferInit);
+            // We have to check if the bearing to the new point is clockwise behind or in front of
+            // the normal init bearing
+            double nNewCurveAngle = getCurveAngle(nNewInit, nBufferInit) > 180 ?
+                    nCurveAngle * 2 - getCurveAngle(nNewInit, nBufferInit) :
+                    nCurveAngle - getCurveAngle(nNewInit, nBufferInit);
             createCurvePoints(next, nNewInit, nNewCurveAngle, bufferPointList);
             // reset the trimmed variable
             bufferWasTrimmed = false;
@@ -379,15 +387,14 @@ public class Buffer {
 
     /**
      * Reverses to point list to process the reverse Line for second buffer half
-     * @param points - Line point array
      * @return {Point[]} - reversed Line Point Array
      */
-    private static Point[] reverse(Point[] points) {
+    private static void reversePoints() {
         Point[] pointsReverse = new Point[points.length];
         for (int i = 0; i < points.length; i++) {
             pointsReverse[points.length - (i + 1)] = points[i];
         }
-        return pointsReverse;
+        points = pointsReverse;
     }
 
     /**
